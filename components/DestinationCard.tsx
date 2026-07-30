@@ -56,6 +56,14 @@ export function DestinationCard({ destination }: DestinationCardProps) {
             </span>
           ))}
         </div>
+        <a
+          href={destination.googleMapsUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-5 inline-flex items-center text-sm font-semibold text-sky-700 transition hover:text-sky-800"
+        >
+          Open in Google Maps ↗
+        </a>
         <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-5 text-sm">
           <span className="font-semibold text-slate-950">{destination.price}</span>
           <span className="text-slate-500">Best time: {destination.bestTime}</span>
