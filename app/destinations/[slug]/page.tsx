@@ -50,6 +50,9 @@ export default async function DestinationDetailsPage({ params }: DestinationDeta
               </div>
             ))}
           </div>
+          <Button href={destination.googleMapsUrl} target="_blank" rel="noreferrer" className="mt-8 w-full">
+            Open in Google Maps
+          </Button>
         </div>
 
         <aside className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60">
