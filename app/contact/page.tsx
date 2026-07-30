@@ -24,6 +24,15 @@ export default function ContactPage() {
             <p>Hours: Monday to Friday, 9:00 AM to 6:00 PM</p>
             <p>Location: Colombo, Sri Lanka</p>
           </div>
+          <div className="overflow-hidden rounded-[1.5rem] border border-white/10">
+            <iframe
+              src="https://www.google.com/maps?q=Colombo,%20Sri%20Lanka&z=12&output=embed"
+              title="Explore Ceylon location"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-72 w-full"
+            />
+          </div>
           <Button href="/booking" variant="secondary">
             Book a trip
           </Button>
