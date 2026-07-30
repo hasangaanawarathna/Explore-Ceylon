@@ -23,6 +23,7 @@ export const destinations: Destination[] = [
     duration: "2 days",
     bestTime: "May to September",
     activities: ["Climb the rock fortress", "Sunrise photography", "Village cycling"],
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Sigiriya%2C%20Sri%20Lanka",
   },
   {
     slug: "ella",
@@ -36,6 +37,7 @@ export const destinations: Destination[] = [
     duration: "3 days",
     bestTime: "December to April",
     activities: ["Nine Arches Bridge", "Little Adam's Peak", "Tea estate tours"],
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Ella%2C%20Sri%20Lanka",
   },
   {
     slug: "mirissa",
@@ -49,6 +51,7 @@ export const destinations: Destination[] = [
     duration: "2 days",
     bestTime: "November to April",
     activities: ["Whale watching", "Beach hopping", "Surf lessons"],
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Mirissa%2C%20Sri%20Lanka",
   },
   {
     slug: "kandy",
@@ -62,6 +65,7 @@ export const destinations: Destination[] = [
     duration: "2 days",
     bestTime: "December to April",
     activities: ["Temple of the Tooth", "Botanical gardens", "Cultural performances"],
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Kandy%2C%20Sri%20Lanka",
   },
   {
     slug: "trincomalee",
@@ -75,6 +79,7 @@ export const destinations: Destination[] = [
     duration: "3 days",
     bestTime: "May to October",
     activities: ["Pigeon Island snorkeling", "Hot springs", "Beach stays"],
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Trincomalee%2C%20Sri%20Lanka",
   },
   {
     slug: "yala",
@@ -88,6 +93,7 @@ export const destinations: Destination[] = [
     duration: "2 days",
     bestTime: "February to July",
     activities: ["Jeep safari", "Birdwatching", "Photography drives"],
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Yala%2C%20Sri%20Lanka",
   },
 ];
 
