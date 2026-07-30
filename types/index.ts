@@ -14,6 +14,7 @@ export type Destination = {
   duration: string;
   bestTime: string;
   activities: string[];
+  googleMapsUrl: string;
 };
 
 export type TravelPackage = {
