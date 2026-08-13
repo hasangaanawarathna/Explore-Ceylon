@@ -75,6 +75,14 @@ const rideHailingApps = [
     tone: "bg-emerald-50 text-emerald-700 ring-emerald-100",
   },
   {
+    name: "HelaGo",
+    url: "https://www.helago.lk/",
+    description:
+      "A Sri Lankan ride-hailing platform where passengers can compare driver offers and choose a suitable ride.",
+    bestFor: "Fare comparison, tuk tuk and car rides, local transfers, and flexible app-based bookings.",
+    tone: "bg-amber-50 text-amber-700 ring-amber-100",
+  },
+  {
     name: "Uber",
     url: "https://www.uber.com/lk/en/",
     description:
@@ -186,7 +194,7 @@ export default function VehiclesPage() {
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-3">
             {rideHailingApps.map((app) => (
               <article key={app.name} className="border border-slate-200 bg-slate-50 p-5">
                 <div className="flex items-center justify-between gap-4">
