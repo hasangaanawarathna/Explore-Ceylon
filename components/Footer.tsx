@@ -57,8 +57,17 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs uppercase tracking-[0.24em] text-slate-400">
-        Explore Ceylon. Frontend architecture for premium travel discovery.
+      <div className="border-t border-white/10 px-6 py-5 text-center text-xs uppercase tracking-[0.24em] text-slate-400">
+        Explore Ceylon. Rates by{" "}
+        <a
+          href="https://www.exchangerate-api.com"
+          className="text-slate-300 transition hover:text-white"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Exchange Rate API
+        </a>
+        .
       </div>
     </footer>
   );

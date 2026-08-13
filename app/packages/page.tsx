@@ -1,8 +1,11 @@
 import { PackageCard } from "@/components/PackageCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { packages } from "@/lib/constants";
+import { getUsdToLkrRate } from "@/lib/utils";
 
-export default function PackagesPage() {
+export default async function PackagesPage() {
+  const usdToLkrRate = await getUsdToLkrRate();
+
   return (
     <div className="mx-auto w-full max-w-7xl space-y-14 px-6 py-16 lg:px-8 lg:py-20">
       <SectionTitle
@@ -12,7 +15,11 @@ export default function PackagesPage() {
       />
       <div className="grid gap-6 lg:grid-cols-3">
         {packages.map((travelPackage) => (
-          <PackageCard key={travelPackage.slug} travelPackage={travelPackage} />
+          <PackageCard
+            key={travelPackage.slug}
+            travelPackage={travelPackage}
+            usdToLkrRate={usdToLkrRate}
+          />
         ))}
       </div>
     </div>

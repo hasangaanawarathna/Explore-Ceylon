@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { SectionTitle } from "@/components/SectionTitle";
 import { getPackageBySlug } from "@/lib/constants";
+import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
 
 interface PackageDetailsPageProps {
   params: Promise<{
@@ -18,6 +19,8 @@ export default async function PackageDetailsPage({ params }: PackageDetailsPageP
     notFound();
   }
 
+  const usdToLkrRate = await getUsdToLkrRate();
+
   return (
     <div className="mx-auto w-full max-w-7xl space-y-14 px-6 py-16 lg:px-8 lg:py-20">
       <SectionTitle
@@ -31,7 +34,9 @@ export default async function PackageDetailsPage({ params }: PackageDetailsPageP
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-3xl bg-white/10 p-5">
               <p className="text-sm text-slate-300">Starting price</p>
-              <p className="mt-2 text-2xl font-semibold">{travelPackage.price}</p>
+              <p className="mt-2 text-2xl font-semibold">
+                From {formatDualCurrency(travelPackage.priceUsd, usdToLkrRate)}
+              </p>
             </div>
             <div className="rounded-3xl bg-white/10 p-5">
               <p className="text-sm text-slate-300">Duration</p>

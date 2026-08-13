@@ -11,8 +11,11 @@ import {
   testimonials,
   whyChooseUs,
 } from "@/lib/constants";
+import { getUsdToLkrRate } from "@/lib/utils";
 
-export default function Home() {
+export default async function Home() {
+  const usdToLkrRate = await getUsdToLkrRate();
+
   return (
     <div className="space-y-24 pb-24">
       <Hero
@@ -35,7 +38,11 @@ export default function Home() {
         />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {destinations.slice(0, 6).map((destination) => (
-            <DestinationCard key={destination.slug} destination={destination} />
+            <DestinationCard
+              key={destination.slug}
+              destination={destination}
+              usdToLkrRate={usdToLkrRate}
+            />
           ))}
         </div>
       </section>
@@ -48,7 +55,11 @@ export default function Home() {
         />
         <div className="grid gap-6 lg:grid-cols-3">
           {packages.slice(0, 3).map((travelPackage) => (
-            <PackageCard key={travelPackage.slug} travelPackage={travelPackage} />
+            <PackageCard
+              key={travelPackage.slug}
+              travelPackage={travelPackage}
+              usdToLkrRate={usdToLkrRate}
+            />
           ))}
         </div>
       </section>

@@ -1,10 +1,11 @@
 import Link from "next/link";
 
 import type { Destination } from "@/types";
-import { cn } from "@/lib/utils";
+import { cn, formatDualCurrency } from "@/lib/utils";
 
 interface DestinationCardProps {
   destination: Destination;
+  usdToLkrRate: number;
 }
 
 const destinationGradients: Record<string, string> = {
@@ -16,7 +17,7 @@ const destinationGradients: Record<string, string> = {
   Yala: "from-lime-500 via-emerald-500 to-green-600",
 };
 
-export function DestinationCard({ destination }: DestinationCardProps) {
+export function DestinationCard({ destination, usdToLkrRate }: DestinationCardProps) {
   return (
     <Link
       href={`/destinations/${destination.slug}`}
@@ -65,7 +66,9 @@ export function DestinationCard({ destination }: DestinationCardProps) {
           Open in Google Maps ↗
         </a>
         <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-5 text-sm">
-          <span className="font-semibold text-slate-950">{destination.price}</span>
+          <span className="font-semibold text-slate-950">
+            From {formatDualCurrency(destination.priceUsd, usdToLkrRate)}
+          </span>
           <span className="text-slate-500">Best time: {destination.bestTime}</span>
         </div>
       </div>

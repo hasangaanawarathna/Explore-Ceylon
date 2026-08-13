@@ -2,8 +2,11 @@ import { DestinationCard } from "@/components/DestinationCard";
 import { SearchBar } from "@/components/SearchBar";
 import { SectionTitle } from "@/components/SectionTitle";
 import { destinations } from "@/lib/constants";
+import { getUsdToLkrRate } from "@/lib/utils";
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
+  const usdToLkrRate = await getUsdToLkrRate();
+
   return (
     <div className="mx-auto w-full max-w-7xl space-y-14 px-6 py-16 lg:px-8 lg:py-20">
       <SectionTitle
@@ -14,7 +17,11 @@ export default function DestinationsPage() {
       <SearchBar />
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {destinations.map((destination) => (
-          <DestinationCard key={destination.slug} destination={destination} />
+          <DestinationCard
+            key={destination.slug}
+            destination={destination}
+            usdToLkrRate={usdToLkrRate}
+          />
         ))}
       </div>
     </div>

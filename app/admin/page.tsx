@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { formatDualCurrency } from "@/lib/utils";
+import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -12,7 +12,12 @@ const stats = [
   { label: "New enquiries", value: "128", change: "+14 this week", tone: "sky" },
   { label: "Confirmed trips", value: "36", change: "+8 this month", tone: "emerald" },
   { label: "Package drafts", value: "12", change: "5 need review", tone: "amber" },
-  { label: "Revenue forecast", value: formatDualCurrency(64000), change: "Q3 pipeline", tone: "rose" },
+  {
+    label: "Revenue forecast",
+    valueUsd: 64000,
+    change: "Q3 pipeline",
+    tone: "rose",
+  },
 ];
 
 const bookings = [
@@ -21,7 +26,7 @@ const bookings = [
     guest: "Nimali Perera",
     trip: "Southern Coast Escape",
     date: "Aug 12",
-    value: formatDualCurrency(1240),
+    valueUsd: 1240,
     status: "Approve",
     payment: "Deposit due",
     agent: "Maya",
@@ -31,7 +36,7 @@ const bookings = [
     guest: "Dilan Fernando",
     trip: "Hill Country Retreat",
     date: "Aug 14",
-    value: formatDualCurrency(980),
+    valueUsd: 980,
     status: "Paid",
     payment: "Settled",
     agent: "Ruwan",
@@ -41,7 +46,7 @@ const bookings = [
     guest: "Sajini Jayawardena",
     trip: "Yala Wildlife Safari",
     date: "Aug 18",
-    value: formatDualCurrency(1620),
+    valueUsd: 1620,
     status: "Plan",
     payment: "Quote sent",
     agent: "Anika",
@@ -51,7 +56,7 @@ const bookings = [
     guest: "Arun Silva",
     trip: "Sigiriya Heritage Loop",
     date: "Aug 21",
-    value: formatDualCurrency(760),
+    valueUsd: 760,
     status: "Contact",
     payment: "Unconfirmed",
     agent: "Maya",
@@ -68,21 +73,21 @@ const packagePipeline = [
   {
     name: "Coast and Culture Escape",
     inventory: "18 seats",
-    price: formatDualCurrency(690),
+    priceUsd: 690,
     visibility: "Published",
     lastEdited: "2h ago",
   },
   {
     name: "Highland Adventure Trail",
     inventory: "9 seats",
-    price: formatDualCurrency(540),
+    priceUsd: 540,
     visibility: "Featured",
     lastEdited: "Yesterday",
   },
   {
     name: "Wildlife and Waves Journey",
     inventory: "14 seats",
-    price: formatDualCurrency(725),
+    priceUsd: 725,
     visibility: "Draft",
     lastEdited: "3d ago",
   },
@@ -116,9 +121,9 @@ const contentTasks = [
 ];
 
 const paymentAlerts = [
-  { label: "Deposits due", value: formatDualCurrency(8420), note: "7 invoices" },
-  { label: "Refund checks", value: formatDualCurrency(620), note: "2 pending" },
-  { label: "Supplier payouts", value: formatDualCurrency(11300), note: "Friday batch" },
+  { label: "Deposits due", valueUsd: 8420, note: "7 invoices" },
+  { label: "Refund checks", valueUsd: 620, note: "2 pending" },
+  { label: "Supplier payouts", valueUsd: 11300, note: "Friday batch" },
 ];
 
 const reportRows = [
@@ -184,7 +189,9 @@ function SectionKicker({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const usdToLkrRate = await getUsdToLkrRate();
+
   return (
     <div className="bg-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
@@ -271,7 +278,9 @@ export default function AdminPage() {
                   </div>
                   <p className="mt-4 text-sm font-medium text-slate-600">{stat.label}</p>
                   <p className="mt-2 text-3xl font-semibold text-slate-950">
-                    {stat.value}
+                    {typeof stat.valueUsd === "number"
+                      ? formatDualCurrency(stat.valueUsd, usdToLkrRate)
+                      : stat.value}
                   </p>
                 </div>
               ))}
@@ -383,7 +392,7 @@ export default function AdminPage() {
                       <td className="px-3 py-4 text-slate-600">{booking.trip}</td>
                       <td className="px-3 py-4 text-slate-600">{booking.date}</td>
                       <td className="px-3 py-4 font-semibold text-slate-950">
-                        {booking.value}
+                        {formatDualCurrency(booking.valueUsd, usdToLkrRate)}
                       </td>
                       <td className="px-3 py-4 text-slate-600">{booking.payment}</td>
                       <td className="px-3 py-4 text-slate-600">{booking.agent}</td>
@@ -460,7 +469,9 @@ export default function AdminPage() {
                           {item.name}
                         </td>
                         <td className="px-3 py-4 text-slate-600">{item.inventory}</td>
-                        <td className="px-3 py-4 text-slate-600">{item.price}</td>
+                        <td className="px-3 py-4 text-slate-600">
+                          {formatDualCurrency(item.priceUsd, usdToLkrRate)}
+                        </td>
                         <td className="px-3 py-4">
                           <StatusBadge status={item.visibility} />
                         </td>
@@ -593,7 +604,7 @@ export default function AdminPage() {
                 <div key={alert.label} className="border border-slate-200 bg-slate-50 p-4">
                   <p className="text-sm font-medium text-slate-600">{alert.label}</p>
                   <p className="mt-2 text-2xl font-semibold text-slate-950">
-                    {alert.value}
+                    {formatDualCurrency(alert.valueUsd, usdToLkrRate)}
                   </p>
                   <p className="mt-2 text-xs font-medium text-slate-500">
                     {alert.note}
@@ -634,7 +645,13 @@ export default function AdminPage() {
               </h3>
               <div className="mt-5 space-y-3">
                 {[
-                  ["Booking approvals", `Require manager approval above ${formatDualCurrency(1000)}`],
+                  [
+                    "Booking approvals",
+                    `Require manager approval above ${formatDualCurrency(
+                      1000,
+                      usdToLkrRate,
+                    )}`,
+                  ],
                   ["Package visibility", "Keep draft packages hidden from guests"],
                   ["Content review", "Route gallery changes through editorial review"],
                 ].map(([label, description]) => (

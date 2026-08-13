@@ -1,12 +1,14 @@
 import Link from "next/link";
 
 import type { TravelPackage } from "@/types";
+import { formatDualCurrency } from "@/lib/utils";
 
 interface PackageCardProps {
   travelPackage: TravelPackage;
+  usdToLkrRate: number;
 }
 
-export function PackageCard({ travelPackage }: PackageCardProps) {
+export function PackageCard({ travelPackage, usdToLkrRate }: PackageCardProps) {
   return (
     <Link
       href={`/packages/${travelPackage.slug}`}
@@ -23,7 +25,7 @@ export function PackageCard({ travelPackage }: PackageCardProps) {
         </div>
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">
-            {travelPackage.price}
+            From {formatDualCurrency(travelPackage.priceUsd, usdToLkrRate)}
           </p>
           <h3 className="mt-2 text-2xl font-semibold">{travelPackage.title}</h3>
         </div>

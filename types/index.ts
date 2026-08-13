@@ -11,6 +11,7 @@ export type Destination = {
   summary: string;
   image: string;
   price: string;
+  priceUsd: number;
   duration: string;
   bestTime: string;
   activities: string[];
@@ -22,6 +23,7 @@ export type TravelPackage = {
   title: string;
   summary: string;
   price: string;
+  priceUsd: number;
   duration: string;
   category: string;
   image: string;
