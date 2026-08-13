@@ -1,4 +1,12 @@
-import type { BlogPost, Destination, NavItem, Testimonial, TravelPackage, ValueItem } from "@/types";
+import type {
+  BlogPost,
+  Destination,
+  NavItem,
+  RestaurantStop,
+  Testimonial,
+  TravelPackage,
+  ValueItem,
+} from "@/types";
 
 export const navigationItems: NavItem[] = [
   { label: "Home", href: "/" },
@@ -140,6 +148,95 @@ export const packages: TravelPackage[] = [
     category: "Family-friendly premium",
     image: "/images/hero-sri-lanka.svg",
     features: ["Safari planning", "Beach resorts", "Family support"],
+  },
+];
+
+export const popularStartPoints = [
+  "Bandaranaike International Airport",
+  "Colombo Fort",
+  "Negombo",
+  "Kandy",
+  "Galle",
+  "Ella",
+];
+
+export const restaurantStops: RestaurantStop[] = [
+  {
+    name: "Upali's by Nawaloka",
+    location: "Colombo",
+    routeArea: "Western Province",
+    bestFor: "Sri Lankan rice and curry",
+    timing: "Start of route",
+  },
+  {
+    name: "The Lagoon",
+    location: "Colombo",
+    routeArea: "Western Province",
+    bestFor: "Seafood before coastal transfers",
+    timing: "Lunch or dinner",
+  },
+  {
+    name: "Cafe Chill",
+    location: "Ella",
+    routeArea: "Hill Country",
+    bestFor: "Relaxed mountain meals",
+    timing: "After sightseeing",
+  },
+  {
+    name: "Balaji Dosai",
+    location: "Kandy",
+    routeArea: "Central Province",
+    bestFor: "Quick vegetarian food",
+    timing: "Mid-route break",
+  },
+  {
+    name: "A Minute by Tuk Tuk",
+    location: "Galle Fort",
+    routeArea: "Southern Coast",
+    bestFor: "Fort views and casual dining",
+    timing: "Coastal stop",
+  },
+  {
+    name: "Zephyr Restaurant",
+    location: "Mirissa",
+    routeArea: "Southern Coast",
+    bestFor: "Beachfront seafood",
+    timing: "Sunset meal",
+  },
+  {
+    name: "Wijaya Beach",
+    location: "Unawatuna",
+    routeArea: "Southern Coast",
+    bestFor: "Pizza and beach breaks",
+    timing: "On the way south",
+  },
+  {
+    name: "Ahinsa Restaurant",
+    location: "Sigiriya",
+    routeArea: "Heritage Triangle",
+    bestFor: "Local meals near the rock",
+    timing: "Before or after climb",
+  },
+  {
+    name: "Mango Mango",
+    location: "Anuradhapura",
+    routeArea: "Heritage Triangle",
+    bestFor: "Family-friendly Sri Lankan food",
+    timing: "Heritage route break",
+  },
+  {
+    name: "Dutch Bank Cafe",
+    location: "Trincomalee",
+    routeArea: "Eastern Coast",
+    bestFor: "Harbor-side cafe plates",
+    timing: "Arrival meal",
+  },
+  {
+    name: "Chef Lady Restaurant",
+    location: "Tissamaharama",
+    routeArea: "Safari",
+    bestFor: "Homestyle dinner before safari",
+    timing: "Evening stop",
   },
 ];
 
