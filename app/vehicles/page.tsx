@@ -65,6 +65,25 @@ const routeExamples = [
   "Custom round tours across Sri Lanka",
 ];
 
+const rideHailingApps = [
+  {
+    name: "PickMe",
+    url: "https://pickme.lk/",
+    description:
+      "A local Sri Lankan ride-hailing app for taxis, tuk tuks, vans, delivery, and quick city rides.",
+    bestFor: "Short trips, tuk tuk rides, airport transfers, and local city travel.",
+    tone: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+  },
+  {
+    name: "Uber",
+    url: "https://www.uber.com/lk/en/",
+    description:
+      "An international ride-hailing app available in Sri Lanka for app-based ride booking.",
+    bestFor: "City pickups, airport rides, point-to-point travel, and cashless app bookings.",
+    tone: "bg-slate-100 text-slate-800 ring-slate-200",
+  },
+];
+
 export default function VehiclesPage() {
   return (
     <div className="bg-slate-50">
@@ -148,6 +167,53 @@ export default function VehiclesPage() {
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
+        <div className="grid gap-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 lg:grid-cols-[0.78fr_1.22fr] lg:p-8">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">
+              App rides in Sri Lanka
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+              PickMe and Uber are useful for quick rides
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-slate-600">
+              Customers can use ride-hailing apps for simple point-to-point trips. For
+              multi-day tours, long routes, large luggage, or driver coordination, Explore
+              Ceylon can arrange the vehicle directly.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {rideHailingApps.map((app) => (
+              <article key={app.name} className="border border-slate-200 bg-slate-50 p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="text-2xl font-semibold text-slate-950">{app.name}</h3>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${app.tone}`}
+                  >
+                    Ride app
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-6 text-slate-600">{app.description}</p>
+                <p className="mt-4 text-sm leading-6 text-slate-600">
+                  <span className="font-semibold text-slate-950">Best for:</span>{" "}
+                  {app.bestFor}
+                </p>
+                <Button
+                  href={app.url}
+                  variant="outline"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-5 w-full"
+                >
+                  Open {app.name}
+                </Button>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
