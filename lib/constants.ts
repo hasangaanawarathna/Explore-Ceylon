@@ -1,4 +1,5 @@
 import type { BlogPost, Destination, NavItem, Testimonial, TravelPackage, ValueItem } from "@/types";
+import { formatDualCurrency } from "@/lib/utils";
 
 export const navigationItems: NavItem[] = [
   { label: "Home", href: "/" },
@@ -19,7 +20,7 @@ export const destinations: Destination[] = [
     summary:
       "An iconic rock fortress surrounded by ancient gardens, frescoes, and panoramic views.",
     image: "/images/hero-sri-lanka.svg",
-    price: "From $180",
+    price: `From ${formatDualCurrency(180)}`,
     duration: "2 days",
     bestTime: "May to September",
     activities: ["Climb the rock fortress", "Sunrise photography", "Village cycling"],
@@ -33,7 +34,7 @@ export const destinations: Destination[] = [
     summary:
       "Railway curves, tea plantations, and cool mountain air make Ella a favorite escape.",
     image: "/images/hero-sri-lanka.svg",
-    price: "From $145",
+    price: `From ${formatDualCurrency(145)}`,
     duration: "3 days",
     bestTime: "December to April",
     activities: ["Nine Arches Bridge", "Little Adam's Peak", "Tea estate tours"],
@@ -47,7 +48,7 @@ export const destinations: Destination[] = [
     summary:
       "A relaxed coastal town with whale watching, golden beaches, and lively sunset dining.",
     image: "/images/hero-sri-lanka.svg",
-    price: "From $220",
+    price: `From ${formatDualCurrency(220)}`,
     duration: "2 days",
     bestTime: "November to April",
     activities: ["Whale watching", "Beach hopping", "Surf lessons"],
@@ -61,7 +62,7 @@ export const destinations: Destination[] = [
     summary:
       "A spiritual and cultural hub with lakeside charm, temples, and traditional dance.",
     image: "/images/hero-sri-lanka.svg",
-    price: "From $160",
+    price: `From ${formatDualCurrency(160)}`,
     duration: "2 days",
     bestTime: "December to April",
     activities: ["Temple of the Tooth", "Botanical gardens", "Cultural performances"],
@@ -75,7 +76,7 @@ export const destinations: Destination[] = [
     summary:
       "A broad natural harbor, calm waters, and long beaches perfect for family travel.",
     image: "/images/hero-sri-lanka.svg",
-    price: "From $210",
+    price: `From ${formatDualCurrency(210)}`,
     duration: "3 days",
     bestTime: "May to October",
     activities: ["Pigeon Island snorkeling", "Hot springs", "Beach stays"],
@@ -89,7 +90,7 @@ export const destinations: Destination[] = [
     summary:
       "Lions, leopards, elephants, and migratory birds create a high-impact wildlife journey.",
     image: "/images/hero-sri-lanka.svg",
-    price: "From $275",
+    price: `From ${formatDualCurrency(275)}`,
     duration: "2 days",
     bestTime: "February to July",
     activities: ["Jeep safari", "Birdwatching", "Photography drives"],
@@ -103,7 +104,7 @@ export const packages: TravelPackage[] = [
     title: "Coast and Culture Escape",
     summary:
       "A balanced route through Colombo, Galle, Mirissa, and Kandy with premium stays.",
-    price: "From $690",
+    price: `From ${formatDualCurrency(690)}`,
     duration: "6 days",
     category: "Best for first-time visitors",
     image: "/images/hero-sri-lanka.svg",
@@ -114,7 +115,7 @@ export const packages: TravelPackage[] = [
     title: "Highland Adventure Trail",
     summary:
       "For travelers who want tea country, scenic rail journeys, and cooler mountain air.",
-    price: "From $540",
+    price: `From ${formatDualCurrency(540)}`,
     duration: "5 days",
     category: "Nature and adventure",
     image: "/images/hero-sri-lanka.svg",
@@ -125,7 +126,7 @@ export const packages: TravelPackage[] = [
     title: "Wildlife and Waves Journey",
     summary:
       "Combine safari mornings with laid-back beach afternoons on a seamless route.",
-    price: "From $725",
+    price: `From ${formatDualCurrency(725)}`,
     duration: "7 days",
     category: "Family-friendly premium",
     image: "/images/hero-sri-lanka.svg",
