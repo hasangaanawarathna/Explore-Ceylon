@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 
 import { Button } from "@/components/Button";
+import { PriceDisplay } from "@/components/PriceDisplay";
 import { SectionTitle } from "@/components/SectionTitle";
 import { getDestinationBySlug } from "@/lib/constants";
-import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
+import { getUsdToLkrRate } from "@/lib/utils";
 
 interface DestinationDetailsPageProps {
   params: Promise<{
@@ -34,9 +35,13 @@ export default async function DestinationDetailsPage({ params }: DestinationDeta
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-3xl bg-white/10 p-5">
               <p className="text-sm text-slate-300">Price</p>
-              <p className="mt-2 text-2xl font-semibold">
-                From {formatDualCurrency(destination.priceUsd, usdToLkrRate)}
-              </p>
+              <PriceDisplay
+                usdAmount={destination.priceUsd}
+                usdToLkrRate={usdToLkrRate}
+                theme="dark"
+                size="lg"
+                className="mt-3"
+              />
             </div>
             <div className="rounded-3xl bg-white/10 p-5">
               <p className="text-sm text-slate-300">Duration</p>
