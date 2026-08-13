@@ -50,3 +50,11 @@ export type ValueItem = {
   title: string;
   description: string;
 };
+
+export type RestaurantStop = {
+  name: string;
+  location: string;
+  routeArea: string;
+  bestFor: string;
+  timing: string;
+};
