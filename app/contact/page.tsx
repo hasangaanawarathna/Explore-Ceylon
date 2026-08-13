@@ -19,8 +19,24 @@ export default function ContactPage() {
             <h2 className="mt-3 text-2xl font-semibold">We respond with useful details</h2>
           </div>
           <div className="space-y-4 text-sm leading-7 text-slate-300">
-            <p>Email: hello@exploreceylon.travel</p>
-            <p>Phone: +94 77 123 4567</p>
+            <p>
+              Email:{" "}
+              <a
+                href="mailto:hasangaanawarathna@gmail.com"
+                className="font-semibold text-white transition hover:text-sky-200"
+              >
+                hasangaanawarathna@gmail.com
+              </a>
+            </p>
+            <p>
+              Phone:{" "}
+              <a
+                href="tel:+94770132675"
+                className="font-semibold text-white transition hover:text-sky-200"
+              >
+                +94 77 0132675
+              </a>
+            </p>
             <p>Hours: Monday to Friday, 9:00 AM to 6:00 PM</p>
             <p>Location: Colombo, Sri Lanka</p>
           </div>
