@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
+import { formatDualCurrency } from "@/lib/utils";
+
 export const metadata: Metadata = {
   title: "Admin",
   description: "Manage Explore Ceylon bookings, packages, leads, and content.",
@@ -10,7 +12,7 @@ const stats = [
   { label: "New enquiries", value: "128", change: "+14 this week", tone: "sky" },
   { label: "Confirmed trips", value: "36", change: "+8 this month", tone: "emerald" },
   { label: "Package drafts", value: "12", change: "5 need review", tone: "amber" },
-  { label: "Revenue forecast", value: "$64k", change: "Q3 pipeline", tone: "rose" },
+  { label: "Revenue forecast", value: formatDualCurrency(64000), change: "Q3 pipeline", tone: "rose" },
 ];
 
 const bookings = [
@@ -19,7 +21,7 @@ const bookings = [
     guest: "Nimali Perera",
     trip: "Southern Coast Escape",
     date: "Aug 12",
-    value: "$1,240",
+    value: formatDualCurrency(1240),
     status: "Approve",
     payment: "Deposit due",
     agent: "Maya",
@@ -29,7 +31,7 @@ const bookings = [
     guest: "Dilan Fernando",
     trip: "Hill Country Retreat",
     date: "Aug 14",
-    value: "$980",
+    value: formatDualCurrency(980),
     status: "Paid",
     payment: "Settled",
     agent: "Ruwan",
@@ -39,7 +41,7 @@ const bookings = [
     guest: "Sajini Jayawardena",
     trip: "Yala Wildlife Safari",
     date: "Aug 18",
-    value: "$1,620",
+    value: formatDualCurrency(1620),
     status: "Plan",
     payment: "Quote sent",
     agent: "Anika",
@@ -49,7 +51,7 @@ const bookings = [
     guest: "Arun Silva",
     trip: "Sigiriya Heritage Loop",
     date: "Aug 21",
-    value: "$760",
+    value: formatDualCurrency(760),
     status: "Contact",
     payment: "Unconfirmed",
     agent: "Maya",
@@ -66,21 +68,21 @@ const packagePipeline = [
   {
     name: "Coast and Culture Escape",
     inventory: "18 seats",
-    price: "$690",
+    price: formatDualCurrency(690),
     visibility: "Published",
     lastEdited: "2h ago",
   },
   {
     name: "Highland Adventure Trail",
     inventory: "9 seats",
-    price: "$540",
+    price: formatDualCurrency(540),
     visibility: "Featured",
     lastEdited: "Yesterday",
   },
   {
     name: "Wildlife and Waves Journey",
     inventory: "14 seats",
-    price: "$725",
+    price: formatDualCurrency(725),
     visibility: "Draft",
     lastEdited: "3d ago",
   },
@@ -114,9 +116,9 @@ const contentTasks = [
 ];
 
 const paymentAlerts = [
-  { label: "Deposits due", value: "$8,420", note: "7 invoices" },
-  { label: "Refund checks", value: "$620", note: "2 pending" },
-  { label: "Supplier payouts", value: "$11,300", note: "Friday batch" },
+  { label: "Deposits due", value: formatDualCurrency(8420), note: "7 invoices" },
+  { label: "Refund checks", value: formatDualCurrency(620), note: "2 pending" },
+  { label: "Supplier payouts", value: formatDualCurrency(11300), note: "Friday batch" },
 ];
 
 const reportRows = [
@@ -632,7 +634,7 @@ export default function AdminPage() {
               </h3>
               <div className="mt-5 space-y-3">
                 {[
-                  ["Booking approvals", "Require manager approval above $1,000"],
+                  ["Booking approvals", `Require manager approval above ${formatDualCurrency(1000)}`],
                   ["Package visibility", "Keep draft packages hidden from guests"],
                   ["Content review", "Route gallery changes through editorial review"],
                 ].map(([label, description]) => (
