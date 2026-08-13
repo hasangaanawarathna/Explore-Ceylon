@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import type { Destination, RestaurantStop } from "@/types";
 
@@ -45,31 +45,23 @@ export function RoutePlanner({
   const effectiveStartPoint = startPoint === "Custom" ? customStartPoint : startPoint;
   const effectiveFinishPoint = finishPoint.trim() || selectedDestination?.name || "";
 
-  const suggestedRestaurants = useMemo(() => {
-    if (!selectedDestination) {
-      return restaurantStops.slice(0, 3);
-    }
-
-    const destinationWords = [
-      selectedDestination.name,
-      selectedDestination.location,
-      selectedDestination.region,
-    ].map((value) => value.toLowerCase());
-
-    const directMatches = restaurantStops.filter((stop) => {
-      const searchable = `${stop.location} ${stop.routeArea}`.toLowerCase();
-      return destinationWords.some((word) => searchable.includes(word) || word.includes(stop.routeArea.toLowerCase()));
-    });
-
-    const startMatches = restaurantStops.filter((stop) =>
-      effectiveStartPoint.toLowerCase().includes(stop.location.toLowerCase()),
+  const destinationWords = selectedDestination
+    ? [selectedDestination.name, selectedDestination.location, selectedDestination.region].map((value) =>
+        value.toLowerCase(),
+      )
+    : [];
+  const directMatches = restaurantStops.filter((stop) => {
+    const searchable = `${stop.location} ${stop.routeArea}`.toLowerCase();
+    return destinationWords.some(
+      (word) => searchable.includes(word) || word.includes(stop.routeArea.toLowerCase()),
     );
-
-    const blendedStops = [...startMatches, ...directMatches, ...restaurantStops];
-    return blendedStops
-      .filter((stop, index, allStops) => allStops.findIndex((item) => item.name === stop.name) === index)
-      .slice(0, 3);
-  }, [effectiveStartPoint, restaurantStops, selectedDestination]);
+  });
+  const startMatches = restaurantStops.filter((stop) =>
+    effectiveStartPoint.toLowerCase().includes(stop.location.toLowerCase()),
+  );
+  const suggestedRestaurants = [...startMatches, ...directMatches, ...restaurantStops]
+    .filter((stop, index, allStops) => allStops.findIndex((item) => item.name === stop.name) === index)
+    .slice(0, 3);
 
   const activeRestaurantStops = includeRestaurants ? suggestedRestaurants : [];
   const mapsUrl = buildGoogleMapsUrl(effectiveStartPoint, effectiveFinishPoint, activeRestaurantStops);
@@ -169,7 +161,7 @@ export function RoutePlanner({
       <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-2xl shadow-slate-950/20 md:p-8">
         <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-200">
+            <p className="text-sm font-semibold uppercase text-sky-200">
               Route preview
             </p>
             <h2 className="mt-3 text-3xl font-semibold">
@@ -178,7 +170,7 @@ export function RoutePlanner({
           </div>
           {selectedDestination ? (
             <div className="rounded-2xl bg-white/10 px-4 py-3 text-sm text-slate-200 ring-1 ring-white/10">
-              {selectedDestination.duration} · {selectedDestination.region}
+              {selectedDestination.duration} - {selectedDestination.region}
             </div>
           ) : null}
         </div>
@@ -193,7 +185,7 @@ export function RoutePlanner({
                 {index < routeSteps.length - 1 ? <div className="h-full min-h-8 w-px bg-white/20" /> : null}
               </div>
               <div className="pb-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">
+                <p className="text-xs font-semibold uppercase text-sky-200">
                   {step.label}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-white">{step.value}</p>
@@ -206,7 +198,7 @@ export function RoutePlanner({
           {activeRestaurantStops.map((stop) => (
             <article key={stop.name} className="rounded-2xl bg-white p-4 text-slate-950">
               <p className="text-sm font-semibold">{stop.name}</p>
-              <p className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-sky-700">
+              <p className="mt-1 text-xs font-medium uppercase text-sky-700">
                 {stop.location}
               </p>
               <p className="mt-3 text-sm leading-6 text-slate-600">{stop.bestFor}</p>
