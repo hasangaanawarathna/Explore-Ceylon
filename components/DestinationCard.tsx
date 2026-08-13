@@ -1,7 +1,8 @@
 import Link from "next/link";
 
+import { PriceDisplay } from "@/components/PriceDisplay";
 import type { Destination } from "@/types";
-import { cn, formatDualCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface DestinationCardProps {
   destination: Destination;
@@ -65,11 +66,9 @@ export function DestinationCard({ destination, usdToLkrRate }: DestinationCardPr
         >
           Open in Google Maps ↗
         </a>
-        <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-5 text-sm">
-          <span className="font-semibold text-slate-950">
-            From {formatDualCurrency(destination.priceUsd, usdToLkrRate)}
-          </span>
-          <span className="text-slate-500">Best time: {destination.bestTime}</span>
+        <div className="mt-6 flex flex-col gap-4 border-t border-slate-200 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <PriceDisplay usdAmount={destination.priceUsd} usdToLkrRate={usdToLkrRate} />
+          <span className="text-sm text-slate-500">Best time: {destination.bestTime}</span>
         </div>
       </div>
     </Link>
