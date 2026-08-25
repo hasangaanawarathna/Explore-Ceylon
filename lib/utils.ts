@@ -2,7 +2,10 @@ export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const SITE_BASE_PATH = "/Explore-Ceylon";
+export const SITE_BASE_PATH =
+  process.env.GITHUB_ACTIONS === "true"
+    ? process.env.NEXT_PUBLIC_BASE_PATH ?? ""
+    : "";
 
 export function withBasePath(path: string) {
   if (!path.startsWith("/")) {

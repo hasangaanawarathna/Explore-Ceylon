@@ -1,9 +1,18 @@
 import type { NextConfig } from "next";
 
+const basePath =
+  process.env.GITHUB_ACTIONS === "true"
+    ? process.env.NEXT_PUBLIC_BASE_PATH ?? ""
+    : "";
+
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: "/Explore-Ceylon",
-  assetPrefix: "/Explore-Ceylon/",
+  ...(basePath
+    ? {
+        basePath,
+        assetPrefix: `${basePath}/`,
+      }
+    : {}),
   images: {
     unoptimized: true,
   },
