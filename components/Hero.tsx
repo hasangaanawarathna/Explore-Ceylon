@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { Button } from "@/components/Button";
+import { withBasePath } from "@/lib/utils";
 
 interface HeroProps {
   eyebrow: string;
@@ -72,7 +73,7 @@ export function Hero({
         <div className="relative min-h-[430px] sm:min-h-[500px] lg:min-h-[560px]">
           <div className="absolute left-0 right-0 top-0 h-[68%] overflow-hidden rounded-2xl bg-teal-950 shadow-2xl shadow-teal-950/20 sm:left-8 sm:h-[74%] sm:rounded-[2rem]">
             <Image
-              src="/images/ui/ceylon-coast-palms.jpg"
+              src={withBasePath("/images/ui/ceylon-coast-palms.jpg")}
               alt="Sri Lankan coastal palms above turquoise water"
               fill
               preload
@@ -87,7 +88,7 @@ export function Hero({
 
           <div className="absolute -left-1 top-20 hidden h-44 w-36 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 lg:block">
             <Image
-              src="/images/ui/ceylon-rail-hills.jpg"
+              src={withBasePath("/images/ui/ceylon-rail-hills.jpg")}
               alt=""
               fill
               sizes="144px"
@@ -97,7 +98,7 @@ export function Hero({
 
           <div className="absolute right-8 top-[54%] hidden h-32 w-48 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 xl:block">
             <Image
-              src="/images/ui/ceylon-temple-lights.jpg"
+              src={withBasePath("/images/ui/ceylon-temple-lights.jpg")}
               alt=""
               fill
               sizes="192px"

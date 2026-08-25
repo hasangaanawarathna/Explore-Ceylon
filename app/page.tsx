@@ -13,7 +13,7 @@ import {
   testimonials,
   whyChooseUs,
 } from "@/lib/constants";
-import { getUsdToLkrRate } from "@/lib/utils";
+import { getUsdToLkrRate, withBasePath } from "@/lib/utils";
 
 export default async function Home() {
   const usdToLkrRate = await getUsdToLkrRate();
@@ -77,7 +77,7 @@ export default async function Home() {
               className={`relative overflow-hidden rounded-2xl bg-white/5 shadow-xl shadow-black/20 sm:rounded-[1.5rem] ${moment.className}`}
               >
                 <Image
-                  src={moment.src}
+                  src={withBasePath(moment.src)}
                   alt={moment.alt}
                   fill
                   sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"

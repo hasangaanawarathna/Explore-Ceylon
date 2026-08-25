@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/Button";
 import { navigationItems } from "@/lib/constants";
+import { withBasePath } from "@/lib/utils";
 
 export function Navbar() {
   return (
@@ -10,7 +11,7 @@ export function Navbar() {
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           <Image
-            src="/icons/explore-mark.svg"
+            src={withBasePath("/icons/explore-mark.svg")}
             alt="Explore Ceylon"
             width={34}
             height={34}

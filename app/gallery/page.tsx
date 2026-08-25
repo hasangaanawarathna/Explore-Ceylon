@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { SectionTitle } from "@/components/SectionTitle";
+import { withBasePath } from "@/lib/utils";
 
 const galleryItems = [
   {
@@ -56,7 +57,7 @@ export default function GalleryPage() {
             className={`group relative min-h-72 overflow-hidden rounded-2xl bg-slate-950 p-5 text-white shadow-xl shadow-slate-200/50 sm:min-h-80 sm:rounded-[2rem] sm:p-6 ${item.className}`}
           >
             <Image
-              src={item.image}
+              src={withBasePath(item.image)}
               alt=""
               fill
               sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"

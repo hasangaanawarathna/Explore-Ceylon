@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { Button } from "@/components/Button";
 import { SectionTitle } from "@/components/SectionTitle";
+import { withBasePath } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Travel Vehicles",
@@ -134,7 +135,7 @@ export default function VehiclesPage() {
 
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/70 sm:rounded-[2rem]">
           <Image
-            src="/images/vehicle-transfer.svg"
+            src={withBasePath("/images/vehicle-transfer.svg")}
             alt="Travel vehicle on a Sri Lanka route"
             width={1200}
             height={820}
