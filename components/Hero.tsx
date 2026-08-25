@@ -96,7 +96,7 @@ export function Hero({
             />
           </div>
 
-          <div className="absolute right-8 top-[54%] hidden h-32 w-48 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 xl:block">
+          <div className="absolute right-0 top-[42%] hidden h-32 w-48 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 xl:block">
             <Image
               src={withBasePath("/images/ui/ceylon-temple-lights.jpg")}
               alt=""
