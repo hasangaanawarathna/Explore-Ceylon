@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Button } from "@/components/Button";
 import { DestinationCard } from "@/components/DestinationCard";
 import { Hero } from "@/components/Hero";
@@ -16,6 +18,29 @@ import { getUsdToLkrRate } from "@/lib/utils";
 export default async function Home() {
   const usdToLkrRate = await getUsdToLkrRate();
 
+  const visualMoments = [
+    {
+      src: "/images/ui/ceylon-monastery-steps.jpg",
+      alt: "Young monks walking down old brick steps",
+      className: "row-span-2 min-h-[360px]",
+    },
+    {
+      src: "/images/ui/ceylon-heritage-park.jpg",
+      alt: "White stupa rising above a green park at dusk",
+      className: "min-h-[180px]",
+    },
+    {
+      src: "/images/ui/ceylon-safari-field.jpg",
+      alt: "Safari jeep beside an elephant in an open field",
+      className: "min-h-[180px]",
+    },
+    {
+      src: "/images/ui/ceylon-rail-hills.jpg",
+      alt: "Blue train crossing a stone bridge through green hills",
+      className: "min-h-[180px]",
+    },
+  ];
+
   return (
     <div className="space-y-24 pb-24">
       <Hero
@@ -28,6 +53,41 @@ export default async function Home() {
 
       <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
         <SearchBar />
+      </section>
+
+      <section className="bg-slate-950 py-16 text-white shadow-2xl shadow-slate-950/10">
+        <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <div className="flex max-w-xl flex-col justify-center">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-300 sm:text-sm">
+              Island atmosphere
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+              A richer first impression before travelers choose a route
+            </h2>
+            <p className="mt-5 text-base leading-8 text-slate-300">
+              From coastal color to temple evenings and hill-country movement,
+              these moments set a warmer tone for planning the journey.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {visualMoments.map((moment) => (
+              <div
+                key={moment.src}
+                className={`relative overflow-hidden rounded-[1.5rem] bg-white/5 shadow-xl shadow-black/20 ${moment.className}`}
+              >
+                <Image
+                  src={moment.src}
+                  alt={moment.alt}
+                  fill
+                  sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.02),rgba(2,6,23,0.28))]" />
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
