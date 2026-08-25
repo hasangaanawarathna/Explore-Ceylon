@@ -3,13 +3,19 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { PriceDisplay } from "@/components/PriceDisplay";
 import { SectionTitle } from "@/components/SectionTitle";
-import { getPackageBySlug } from "@/lib/constants";
+import { getPackageBySlug, packages } from "@/lib/constants";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 interface PackageDetailsPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export function generateStaticParams() {
+  return packages.map((travelPackage) => ({
+    slug: travelPackage.slug,
+  }));
 }
 
 export default async function PackageDetailsPage({ params }: PackageDetailsPageProps) {

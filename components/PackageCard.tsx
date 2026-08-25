@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { PriceDisplay } from "@/components/PriceDisplay";
 import type { TravelPackage } from "@/types";
+import { withBasePath } from "@/lib/utils";
 
 interface PackageCardProps {
   travelPackage: TravelPackage;
@@ -14,7 +15,12 @@ export function PackageCard({ travelPackage, usdToLkrRate }: PackageCardProps) {
       href={`/packages/${travelPackage.slug}`}
       className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 text-white shadow-xl shadow-slate-900/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-[2rem]"
     >
-      <div className="flex h-48 flex-col justify-between bg-[linear-gradient(135deg,rgba(2,6,23,0.9),rgba(15,23,42,0.6)),url('/images/hero-sri-lanka.svg')] bg-cover bg-center p-5 sm:h-56 sm:p-6">
+      <div
+        className="flex h-48 flex-col justify-between bg-cover bg-center p-5 sm:h-56 sm:p-6"
+        style={{
+          backgroundImage: `linear-gradient(135deg,rgba(2,6,23,0.9),rgba(15,23,42,0.6)),url('${withBasePath(travelPackage.image)}')`,
+        }}
+      >
         <div className="flex items-center justify-between gap-3">
           <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200 backdrop-blur sm:tracking-[0.2em]">
             {travelPackage.category}

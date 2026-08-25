@@ -1,9 +1,10 @@
 import { Button } from "@/components/Button";
+import { withBasePath } from "@/lib/utils";
 
 export function SearchBar() {
   return (
     <form
-      action="/destinations"
+      action={withBasePath("/destinations")}
       method="get"
       className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/70 sm:rounded-[2rem] sm:p-5 lg:grid-cols-[1.2fr_1fr_1fr_auto]"
     >

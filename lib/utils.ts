@@ -2,6 +2,16 @@ export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+export const SITE_BASE_PATH = "/Explore-Ceylon";
+
+export function withBasePath(path: string) {
+  if (!path.startsWith("/")) {
+    return path;
+  }
+
+  return `${SITE_BASE_PATH}${path}`;
+}
+
 export const FALLBACK_USD_TO_LKR_RATE = 336;
 
 export function formatUsd(amount: number) {
