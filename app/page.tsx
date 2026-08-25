@@ -22,27 +22,27 @@ export default async function Home() {
     {
       src: "/images/ui/ceylon-monastery-steps.jpg",
       alt: "Young monks walking down old brick steps",
-      className: "row-span-2 min-h-[360px]",
+      className: "min-h-[260px] sm:row-span-2 sm:min-h-[360px]",
     },
     {
       src: "/images/ui/ceylon-heritage-park.jpg",
       alt: "White stupa rising above a green park at dusk",
-      className: "min-h-[180px]",
+      className: "min-h-[220px] sm:min-h-[180px]",
     },
     {
       src: "/images/ui/ceylon-safari-field.jpg",
       alt: "Safari jeep beside an elephant in an open field",
-      className: "min-h-[180px]",
+      className: "min-h-[220px] sm:min-h-[180px]",
     },
     {
       src: "/images/ui/ceylon-rail-hills.jpg",
       alt: "Blue train crossing a stone bridge through green hills",
-      className: "min-h-[180px]",
+      className: "min-h-[220px] sm:min-h-[180px]",
     },
   ];
 
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
       <Hero
         eyebrow="Premium travel experiences in Sri Lanka"
         title="Discover the Hidden Beauty of Sri Lanka"
@@ -51,12 +51,12 @@ export default async function Home() {
         secondaryCta={{ label: "Explore packages", href: "/packages" }}
       />
 
-      <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SearchBar />
       </section>
 
       <section className="bg-slate-950 py-16 text-white shadow-2xl shadow-slate-950/10">
-        <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10 lg:px-8">
           <div className="flex max-w-xl flex-col justify-center">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-300 sm:text-sm">
               Island atmosphere
@@ -74,7 +74,7 @@ export default async function Home() {
             {visualMoments.map((moment) => (
               <div
                 key={moment.src}
-                className={`relative overflow-hidden rounded-[1.5rem] bg-white/5 shadow-xl shadow-black/20 ${moment.className}`}
+              className={`relative overflow-hidden rounded-2xl bg-white/5 shadow-xl shadow-black/20 sm:rounded-[1.5rem] ${moment.className}`}
               >
                 <Image
                   src={moment.src}
@@ -90,7 +90,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
           eyebrow="Featured destinations"
           title="Six places that define the island"
@@ -107,7 +107,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
           eyebrow="Popular packages"
           title="Premium journeys for every travel style"
@@ -124,8 +124,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-7xl gap-8 px-6 lg:grid-cols-[1fr_1.2fr] lg:px-8">
-        <div className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-950/20">
+      <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[1fr_1.2fr] lg:gap-8 lg:px-8">
+        <div className="rounded-2xl bg-slate-950 p-5 text-white shadow-2xl shadow-slate-950/20 sm:rounded-[2rem] sm:p-8">
           <SectionTitle
             eyebrow="Why choose us"
             title="Designed for travelers who want clarity"
@@ -136,7 +136,7 @@ export default async function Home() {
             {whyChooseUs.map((item) => (
               <div
                 key={item.title}
-                className="rounded-3xl border border-white/10 bg-white/5 p-5"
+                className="rounded-2xl border border-white/10 bg-white/5 p-5 sm:rounded-3xl"
               >
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-200">
                   {item.label}
@@ -152,7 +152,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/60 sm:rounded-[2rem] sm:p-8">
           <SectionTitle
             eyebrow="Testimonials"
             title="Trusted by leisure and adventure travelers"
@@ -162,7 +162,7 @@ export default async function Home() {
             {testimonials.map((testimonial) => (
               <figure
                 key={testimonial.name}
-                className="rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-200"
+                className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 sm:rounded-3xl sm:p-6"
               >
                 <blockquote className="text-sm leading-7 text-slate-700">
                   {testimonial.quote}
@@ -182,7 +182,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
           eyebrow="Travel blog"
           title="Stories, guides, and practical travel insight"
@@ -192,7 +192,7 @@ export default async function Home() {
           {blogPosts.slice(0, 3).map((post) => (
             <article
               key={post.slug}
-              className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/50"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/50 sm:rounded-[2rem] sm:p-6"
             >
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
                 {post.category}

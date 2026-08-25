@@ -95,7 +95,7 @@ const rideHailingApps = [
 export default function VehiclesPage() {
   return (
     <div className="bg-slate-50">
-      <section className="mx-auto grid w-full max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-20">
+      <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:px-8 lg:py-20">
         <div className="flex flex-col justify-center">
           <SectionTitle
             eyebrow="Travel vehicles"
@@ -103,24 +103,27 @@ export default function VehiclesPage() {
             description="Choose a private car, SUV, van, or coach for airport transfers, destination routes, day tours, and full holiday packages."
           />
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="tel:+94770132675">Call now</Button>
+            <Button href="tel:+94770132675" className="w-full sm:w-auto">
+              Call now
+            </Button>
             <Button
               href="https://wa.me/94770132675?text=Hello%20Explore%20Ceylon%2C%20I%20need%20a%20travel%20vehicle%20for%20my%20trip."
               variant="outline"
               target="_blank"
               rel="noreferrer"
+              className="w-full sm:w-auto"
             >
               WhatsApp enquiry
             </Button>
           </div>
           <div className="mt-8 grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
-            <div className="border border-slate-200 bg-white p-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="font-semibold text-slate-950">Phone</p>
               <a href="tel:+94770132675" className="mt-1 block text-sky-700">
                 +94 77 0132675
               </a>
             </div>
-            <div className="border border-slate-200 bg-white p-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="font-semibold text-slate-950">Email</p>
               <a href="mailto:hasangaanawarathna@gmail.com" className="mt-1 block break-all text-sky-700">
                 hasangaanawarathna@gmail.com
@@ -129,16 +132,16 @@ export default function VehiclesPage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-2xl shadow-slate-200/70">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/70 sm:rounded-[2rem]">
           <Image
             src="/images/vehicle-transfer.svg"
             alt="Travel vehicle on a Sri Lanka route"
             width={1200}
             height={820}
             priority
-            className="h-full min-h-[360px] w-full object-cover"
+            className="h-full min-h-[300px] w-full object-cover sm:min-h-[360px]"
           />
-          <div className="absolute bottom-5 left-5 right-5 rounded-3xl bg-slate-950/85 p-5 text-white backdrop-blur">
+          <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-slate-950/85 p-4 text-white backdrop-blur sm:bottom-5 sm:left-5 sm:right-5 sm:rounded-3xl sm:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">
               Fast vehicle matching
             </p>
@@ -149,12 +152,12 @@ export default function VehiclesPage() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
         <div className="grid gap-5 lg:grid-cols-4">
           {vehicleOptions.map((vehicle) => (
             <article
               key={vehicle.name}
-              className="border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/70"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/70"
             >
               <div className="flex items-start justify-between gap-4">
                 <h2 className="text-xl font-semibold text-slate-950">{vehicle.name}</h2>
@@ -178,13 +181,13 @@ export default function VehiclesPage() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
-        <div className="grid gap-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 lg:grid-cols-[0.78fr_1.22fr] lg:p-8">
+      <section className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
+        <div className="grid gap-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-6 lg:grid-cols-[0.78fr_1.22fr] lg:gap-8 lg:p-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">
               App rides in Sri Lanka
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
               PickMe and Uber are useful for quick rides
             </h2>
             <p className="mt-4 text-sm leading-7 text-slate-600">
@@ -196,7 +199,7 @@ export default function VehiclesPage() {
 
           <div className="grid gap-4 md:grid-cols-3">
             {rideHailingApps.map((app) => (
-              <article key={app.name} className="border border-slate-200 bg-slate-50 p-5">
+              <article key={app.name} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                 <div className="flex items-center justify-between gap-4">
                   <h3 className="text-2xl font-semibold text-slate-950">{app.name}</h3>
                   <span
@@ -226,12 +229,12 @@ export default function VehiclesPage() {
       </section>
 
       <section className="border-y border-slate-200 bg-white">
-        <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10 lg:px-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">
               How customers find it
             </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
               Simple route details are enough to start
             </h2>
             <p className="mt-4 text-sm leading-7 text-slate-600">
@@ -241,7 +244,7 @@ export default function VehiclesPage() {
 
           <div className="grid gap-4 md:grid-cols-3">
             {steps.map((step, index) => (
-              <div key={step.title} className="bg-slate-50 p-5 ring-1 ring-slate-200">
+              <div key={step.title} className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">
                   {index + 1}
                 </span>
@@ -253,8 +256,8 @@ export default function VehiclesPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[1fr_0.85fr] lg:px-8">
-        <div className="rounded-[2rem] bg-slate-950 p-8 text-white">
+      <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_0.85fr] lg:gap-8 lg:px-8">
+        <div className="rounded-2xl bg-slate-950 p-5 text-white sm:rounded-[2rem] sm:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-300">
             Popular routes
           </p>
@@ -267,7 +270,7 @@ export default function VehiclesPage() {
           </div>
         </div>
 
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/60 sm:rounded-[2rem] sm:p-8">
           <h2 className="text-2xl font-semibold text-slate-950">Ready to connect?</h2>
           <p className="mt-4 text-sm leading-7 text-slate-600">
             Send the trip details now. We will reply with the recommended vehicle, estimated price, and next steps.

@@ -12,11 +12,11 @@ export function PackageCard({ travelPackage, usdToLkrRate }: PackageCardProps) {
   return (
     <Link
       href={`/packages/${travelPackage.slug}`}
-      className="group overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 text-white shadow-xl shadow-slate-900/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
+      className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 text-white shadow-xl shadow-slate-900/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-[2rem]"
     >
-      <div className="flex h-56 flex-col justify-between bg-[linear-gradient(135deg,rgba(2,6,23,0.9),rgba(15,23,42,0.6)),url('/images/hero-sri-lanka.svg')] bg-cover bg-center p-6">
-        <div className="flex items-center justify-between gap-4">
-          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200 backdrop-blur">
+      <div className="flex h-48 flex-col justify-between bg-[linear-gradient(135deg,rgba(2,6,23,0.9),rgba(15,23,42,0.6)),url('/images/hero-sri-lanka.svg')] bg-cover bg-center p-5 sm:h-56 sm:p-6">
+        <div className="flex items-center justify-between gap-3">
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200 backdrop-blur sm:tracking-[0.2em]">
             {travelPackage.category}
           </span>
           <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur">
@@ -33,7 +33,7 @@ export function PackageCard({ travelPackage, usdToLkrRate }: PackageCardProps) {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-5 sm:p-6">
         <p className="text-sm leading-7 text-slate-300">{travelPackage.summary}</p>
         <div className="mt-5 flex flex-wrap gap-2">
           {travelPackage.features.map((feature) => (

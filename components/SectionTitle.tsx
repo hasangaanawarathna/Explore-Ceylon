@@ -19,7 +19,7 @@ export function SectionTitle({
     <div className={cn("max-w-3xl", center && "mx-auto text-center")}>
       <p
         className={cn(
-          "text-sm font-semibold uppercase tracking-[0.24em]",
+          "text-xs font-semibold uppercase tracking-[0.18em] sm:text-sm sm:tracking-[0.24em]",
           dark ? "text-sky-300" : "text-sky-700",
         )}
       >
@@ -27,7 +27,7 @@ export function SectionTitle({
       </p>
       <h2
         className={cn(
-          "mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-4xl",
+          "mt-3 text-2xl font-semibold tracking-tight text-balance sm:mt-4 sm:text-4xl",
           dark ? "text-white" : "text-slate-950",
         )}
       >
@@ -35,7 +35,7 @@ export function SectionTitle({
       </h2>
       <p
         className={cn(
-          "mt-4 text-base leading-8",
+          "mt-3 text-sm leading-7 sm:mt-4 sm:text-base sm:leading-8",
           dark ? "text-slate-300" : "text-slate-600",
         )}
       >

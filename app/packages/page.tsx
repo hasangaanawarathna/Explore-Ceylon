@@ -7,7 +7,7 @@ export default async function PackagesPage() {
   const usdToLkrRate = await getUsdToLkrRate();
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-14 px-6 py-16 lg:px-8 lg:py-20">
+    <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-12 sm:space-y-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
       <SectionTitle
         eyebrow="Tour packages"
         title="Curated journeys built for smooth planning"

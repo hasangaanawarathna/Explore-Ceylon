@@ -196,19 +196,19 @@ export default async function AdminPage() {
     <div className="bg-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
         <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] lg:w-64">
-          <div className="border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:rounded-none">
             <div className="border-b border-slate-200 pb-4">
               <SectionKicker>Explore Ceylon</SectionKicker>
               <h1 className="mt-2 text-2xl font-semibold text-slate-950">Admin</h1>
               <p className="mt-2 text-sm text-slate-500">Tuesday, Aug 4</p>
             </div>
 
-            <nav className="mt-4 space-y-1">
+            <nav className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
               {navItems.map((item, index) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className={`block px-3 py-2 text-sm font-medium transition ${
+                  className={`block shrink-0 rounded-full px-3 py-2 text-sm font-medium transition lg:rounded-none ${
                     index === 0
                       ? "bg-slate-950 text-white"
                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
@@ -253,13 +253,13 @@ export default async function AdminPage() {
               <div className="grid gap-2 sm:grid-cols-2">
                 <Link
                   href="/booking"
-                  className="bg-sky-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-sky-500"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-sky-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-sky-500"
                 >
                   New booking
                 </Link>
                 <Link
                   href="/packages"
-                  className="border border-slate-300 bg-white px-4 py-2 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
                 >
                   Manage packages
                 </Link>
@@ -297,14 +297,14 @@ export default async function AdminPage() {
                   </h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <select className="h-10 border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700">
+                  <select className="h-11 w-full rounded-full border border-slate-300 bg-white px-3 text-base font-medium text-slate-700 sm:w-auto sm:text-sm">
                     <option>All statuses</option>
                     <option>Needs approval</option>
                     <option>Paid</option>
                     <option>Drafts</option>
                   </select>
                   <input
-                    className="h-10 min-w-0 border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-sky-400 sm:w-64"
+                    className="h-11 min-w-0 rounded-full border border-slate-300 bg-white px-3 text-base text-slate-700 outline-none focus:border-sky-400 sm:w-64 sm:text-sm"
                     placeholder="Search guest, route, package"
                   />
                 </div>
@@ -313,7 +313,7 @@ export default async function AdminPage() {
                 {quickActions.map((action) => (
                   <button
                     key={action}
-                    className="border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800"
+                    className="min-h-11 rounded-full border border-slate-200 bg-slate-50 px-4 py-3 text-left text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800 sm:rounded-none"
                     type="button"
                   >
                     {action}

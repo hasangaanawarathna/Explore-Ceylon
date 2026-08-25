@@ -43,7 +43,7 @@ const galleryItems = [
 
 export default function GalleryPage() {
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-14 px-6 py-16 lg:px-8 lg:py-20">
+    <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-12 sm:space-y-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
       <SectionTitle
         eyebrow="Gallery"
         title="Visual moments from the island"
@@ -53,7 +53,7 @@ export default function GalleryPage() {
         {galleryItems.map((item, index) => (
           <div
             key={item.title}
-            className={`group relative min-h-80 overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl shadow-slate-200/50 ${item.className}`}
+            className={`group relative min-h-72 overflow-hidden rounded-2xl bg-slate-950 p-5 text-white shadow-xl shadow-slate-200/50 sm:min-h-80 sm:rounded-[2rem] sm:p-6 ${item.className}`}
           >
             <Image
               src={item.image}
@@ -68,7 +68,7 @@ export default function GalleryPage() {
                 0{index + 1}
               </p>
               <div>
-                <h3 className="text-2xl font-semibold">{item.title}</h3>
+                <h3 className="text-xl font-semibold sm:text-2xl">{item.title}</h3>
                 <p className="mt-2 max-w-sm text-sm leading-7 text-white/80">
                   {item.description}
                 </p>

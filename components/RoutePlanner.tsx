@@ -84,14 +84,14 @@ export function RoutePlanner({
 
   return (
     <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <form className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 md:p-8">
+      <form className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-6 md:p-8">
         <div className="grid gap-5">
           <label className="grid gap-2 text-sm font-medium text-slate-700">
             Destination you choose
             <select
               value={selectedDestinationSlug}
               onChange={(event) => handleDestinationChange(event.target.value)}
-              className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none transition focus:border-sky-400 focus:bg-white"
+              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
             >
               {destinations.map((destination) => (
                 <option key={destination.slug} value={destination.slug}>
@@ -106,7 +106,7 @@ export function RoutePlanner({
             <select
               value={startPoint}
               onChange={(event) => setStartPoint(event.target.value)}
-              className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none transition focus:border-sky-400 focus:bg-white"
+              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
             >
               {popularStartPoints.map((point) => (
                 <option key={point}>{point}</option>
@@ -122,7 +122,7 @@ export function RoutePlanner({
                 value={customStartPoint}
                 onChange={(event) => setCustomStartPoint(event.target.value)}
                 placeholder="Example: Hikkaduwa"
-                className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none transition focus:border-sky-400 focus:bg-white"
+                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
               />
             </label>
           ) : null}
@@ -133,7 +133,7 @@ export function RoutePlanner({
               value={finishPoint}
               onChange={(event) => setFinishPoint(event.target.value)}
               placeholder="Example: Ella"
-              className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none transition focus:border-sky-400 focus:bg-white"
+              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
             />
           </label>
 
@@ -152,19 +152,19 @@ export function RoutePlanner({
           href={mapsUrl}
           target="_blank"
           rel="noreferrer"
-          className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-600/20 transition hover:-translate-y-0.5 hover:bg-sky-500"
+          className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-sky-600 px-5 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-sky-600/20 transition hover:-translate-y-0.5 hover:bg-sky-500"
         >
           Open route with restaurants
         </a>
       </form>
 
-      <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-2xl shadow-slate-950/20 md:p-8">
+      <section className="rounded-2xl bg-slate-950 p-5 text-white shadow-2xl shadow-slate-950/20 sm:rounded-[2rem] sm:p-6 md:p-8">
         <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase text-sky-200">
               Route preview
             </p>
-            <h2 className="mt-3 text-3xl font-semibold">
+            <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
               {effectiveStartPoint || "Start point"} to {effectiveFinishPoint || "finish point"}
             </h2>
           </div>

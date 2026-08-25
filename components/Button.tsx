@@ -30,7 +30,7 @@ export function Button({
   return (
     <Link
       className={cn(
-        "inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition duration-200",
+        "inline-flex min-h-11 items-center justify-center rounded-full px-5 py-3 text-center text-sm font-semibold transition duration-200",
         variantStyles[variant],
         className,
       )}

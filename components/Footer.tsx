@@ -16,12 +16,12 @@ const footerColumns = [
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-slate-950 text-white">
-      <div className="mx-auto grid w-full max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
+      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-16 lg:grid-cols-[1.2fr_1fr_1fr] lg:gap-12 lg:px-8">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
             Explore Ceylon
           </p>
-          <p className="mt-4 max-w-md text-2xl font-semibold tracking-tight text-balance">
+          <p className="mt-4 max-w-md text-xl font-semibold tracking-tight text-balance sm:text-2xl">
             A premium travel platform for discovering Sri Lanka.
           </p>
           <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300">

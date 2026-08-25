@@ -9,7 +9,7 @@ const stats = [
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-20 px-6 py-16 lg:px-8 lg:py-20">
+    <div className="mx-auto w-full max-w-7xl space-y-12 px-4 py-12 sm:space-y-20 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
       <SectionTitle
         eyebrow="About"
         title="A modern travel brand built around Sri Lanka"
@@ -17,7 +17,7 @@ export default function AboutPage() {
       />
 
       <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/50">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-8">
           <h2 className="text-2xl font-semibold text-slate-950">Our mission</h2>
           <p className="mt-4 text-base leading-8 text-slate-600">
             Present Sri Lanka in a way that feels elevated, practical, and easy to
@@ -32,7 +32,7 @@ export default function AboutPage() {
 
         <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
           {stats.map((stat) => (
-            <div key={stat.label} className="rounded-[2rem] bg-slate-950 p-6 text-white">
+            <div key={stat.label} className="rounded-2xl bg-slate-950 p-5 text-white sm:rounded-[2rem] sm:p-6">
               <p className="text-3xl font-semibold">{stat.value}</p>
               <p className="mt-2 text-sm text-slate-300">{stat.label}</p>
             </div>
@@ -50,7 +50,7 @@ export default function AboutPage() {
           {whyChooseUs.map((item) => (
             <div
               key={item.title}
-              className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/40"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 sm:rounded-[2rem] sm:p-6"
             >
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
                 {item.label}

@@ -3,7 +3,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-16 px-6 py-16 lg:px-8 lg:py-20">
+    <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-12 sm:space-y-16 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
       <SectionTitle
         eyebrow="Contact"
         title="Start a conversation about your trip"
@@ -11,7 +11,7 @@ export default function ContactPage() {
       />
 
       <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="space-y-6 rounded-[2rem] bg-slate-950 p-8 text-white">
+        <div className="space-y-6 rounded-2xl bg-slate-950 p-5 text-white sm:rounded-[2rem] sm:p-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-300">
               Reach us
@@ -40,7 +40,7 @@ export default function ContactPage() {
             <p>Hours: Monday to Friday, 9:00 AM to 6:00 PM</p>
             <p>Location: Colombo, Sri Lanka</p>
           </div>
-          <div className="overflow-hidden rounded-[1.5rem] border border-white/10">
+          <div className="overflow-hidden rounded-2xl border border-white/10 sm:rounded-[1.5rem]">
             <iframe
               src="https://www.google.com/maps?q=Colombo,%20Sri%20Lanka&z=12&output=embed"
               title="Explore Ceylon location"
@@ -49,29 +49,29 @@ export default function ContactPage() {
               className="h-72 w-full"
             />
           </div>
-          <Button href="/booking" variant="secondary">
+          <Button href="/booking" variant="secondary" className="w-full sm:w-auto">
             Book a trip
           </Button>
         </div>
 
-        <form className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/50">
+        <form className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-8">
           <div className="grid gap-5 md:grid-cols-2">
             <label className="grid gap-2 text-sm font-medium text-slate-700">
               Full name
-              <input className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-sky-400 focus:bg-white" />
+              <input className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" />
             </label>
             <label className="grid gap-2 text-sm font-medium text-slate-700">
               Email address
-              <input type="email" className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-sky-400 focus:bg-white" />
+              <input type="email" className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" />
             </label>
           </div>
           <label className="mt-5 grid gap-2 text-sm font-medium text-slate-700">
             Subject
-            <input className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none focus:border-sky-400 focus:bg-white" />
+            <input className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" />
           </label>
           <label className="mt-5 grid gap-2 text-sm font-medium text-slate-700">
             Message
-            <textarea className="min-h-40 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sky-400 focus:bg-white" />
+            <textarea className="min-h-40 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-3xl sm:text-sm" />
           </label>
           <Button href="/contact" className="mt-6 w-full">
             Send enquiry
