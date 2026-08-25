@@ -67,20 +67,40 @@ export function Hero({
           </div>
         </div>
 
-        <div className="relative min-h-[520px]">
-          <div className="absolute left-8 right-0 top-0 h-[72%] overflow-hidden rounded-[2rem] bg-teal-950 shadow-2xl shadow-teal-950/20">
+        <div className="relative min-h-[560px]">
+          <div className="absolute left-8 right-0 top-0 h-[74%] overflow-hidden rounded-[2rem] bg-teal-950 shadow-2xl shadow-teal-950/20">
             <Image
-              src="/images/hero-sri-lanka.svg"
-              alt="Sri Lankan coastal landscape"
+              src="/images/ui/ceylon-coast-palms.jpg"
+              alt="Sri Lankan coastal palms above turquoise water"
               fill
-              priority
+              preload
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.34))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.02),rgba(15,23,42,0.48))]" />
             <div className="absolute left-6 top-6 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-950/10">
               Island grand tour
             </div>
+          </div>
+
+          <div className="absolute -left-1 top-20 hidden h-44 w-36 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 sm:block">
+            <Image
+              src="/images/ui/ceylon-rail-hills.jpg"
+              alt=""
+              fill
+              sizes="144px"
+              className="object-cover"
+            />
+          </div>
+
+          <div className="absolute right-8 top-[54%] hidden h-32 w-48 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 md:block">
+            <Image
+              src="/images/ui/ceylon-temple-lights.jpg"
+              alt=""
+              fill
+              sizes="192px"
+              className="object-cover"
+            />
           </div>
 
           <div className="absolute bottom-0 left-0 w-full max-w-lg rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/14">
