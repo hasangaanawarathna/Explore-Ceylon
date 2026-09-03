@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
+import { AdminContentEditor } from "@/components/AdminContentEditor";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -581,6 +582,7 @@ export default async function AdminPage() {
                   </div>
                 ))}
               </div>
+              <AdminContentEditor />
             </div>
           </section>
 
