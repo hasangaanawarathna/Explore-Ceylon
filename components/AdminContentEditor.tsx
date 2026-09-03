@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import { destinations, packages } from "@/lib/constants";
 
@@ -45,12 +45,10 @@ function loadContent(): EditableContent {
 }
 
 export function AdminContentEditor() {
-  const [content, setContent] = useState<EditableContent>(defaultContent);
+  const [content, setContent] = useState<EditableContent>(() => loadContent());
   const [kind, setKind] = useState<ContentKind>("hero");
   const [selectedSlug, setSelectedSlug] = useState(destinations[0].slug);
   const [saved, setSaved] = useState(false);
-
-  useEffect(() => setContent(loadContent()), []);
 
   const selectedItem = kind === "destination"
     ? destinations.find((item) => item.slug === selectedSlug)
