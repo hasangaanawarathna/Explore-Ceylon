@@ -28,6 +28,25 @@ function buildGoogleMapsUrl(startPoint: string, finishPoint: string, stops: Rest
   return `https://www.google.com/maps/dir/?${params.toString()}`;
 }
 
+function buildGoogleMapsEmbedUrl(
+  startPoint: string,
+  finishPoint: string,
+  stops: RestaurantStop[],
+) {
+  const destinationParts = [
+    ...stops.map((stop) => `${stop.name}, ${stop.location}, Sri Lanka`),
+    `${finishPoint}, Sri Lanka`,
+  ];
+  const params = new URLSearchParams({
+    output: "embed",
+    saddr: `${startPoint}, Sri Lanka`,
+    daddr: destinationParts.join(" to:"),
+    dirflg: "d",
+  });
+
+  return `https://www.google.com/maps?${params.toString()}`;
+}
+
 export function RoutePlanner({
   destinations,
   popularStartPoints,
@@ -65,6 +84,11 @@ export function RoutePlanner({
 
   const activeRestaurantStops = includeRestaurants ? suggestedRestaurants : [];
   const mapsUrl = buildGoogleMapsUrl(effectiveStartPoint, effectiveFinishPoint, activeRestaurantStops);
+  const mapEmbedUrl = buildGoogleMapsEmbedUrl(
+    effectiveStartPoint,
+    effectiveFinishPoint,
+    activeRestaurantStops,
+  );
   const routeSteps = [
     { label: "Start", value: effectiveStartPoint || "Choose a start point" },
     ...activeRestaurantStops.map((stop) => ({
@@ -173,6 +197,18 @@ export function RoutePlanner({
               {selectedDestination.duration} - {selectedDestination.region}
             </div>
           ) : null}
+        </div>
+
+        <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-slate-900">
+          <iframe
+            key={mapEmbedUrl}
+            src={mapEmbedUrl}
+            title={`Google Maps route from ${effectiveStartPoint} to ${effectiveFinishPoint}`}
+            className="h-72 w-full border-0 sm:h-80"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
         </div>
 
         <div className="mt-6 space-y-4">
