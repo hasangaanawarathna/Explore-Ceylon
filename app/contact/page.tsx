@@ -1,5 +1,6 @@
 import { Button } from "@/components/Button";
 import { SectionTitle } from "@/components/SectionTitle";
+import { ContactForm } from "@/components/ContactForm";
 
 export default function ContactPage() {
   return (
@@ -54,29 +55,7 @@ export default function ContactPage() {
           </Button>
         </div>
 
-        <form className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-8">
-          <div className="grid gap-5 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-medium text-slate-700">
-              Full name
-              <input className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" />
-            </label>
-            <label className="grid gap-2 text-sm font-medium text-slate-700">
-              Email address
-              <input type="email" className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" />
-            </label>
-          </div>
-          <label className="mt-5 grid gap-2 text-sm font-medium text-slate-700">
-            Subject
-            <input className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" />
-          </label>
-          <label className="mt-5 grid gap-2 text-sm font-medium text-slate-700">
-            Message
-            <textarea className="min-h-40 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-3xl sm:text-sm" />
-          </label>
-          <Button href="/contact" className="mt-6 w-full">
-            Send enquiry
-          </Button>
-        </form>
+        <ContactForm />
       </div>
     </div>
   );
