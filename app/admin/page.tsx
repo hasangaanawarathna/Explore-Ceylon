@@ -142,6 +142,14 @@ const quickActions = [
   "Export report",
 ];
 
+const revenuePulse = [42, 56, 48, 71, 64, 78, 92];
+
+const attentionItems = [
+  { label: "Booking approval", detail: "EC-1048 · Deposit due", tone: "amber" },
+  { label: "Supplier response", detail: "Yala safari · 2h overdue", tone: "rose" },
+  { label: "Content review", detail: "4 gallery images waiting", tone: "sky" },
+];
+
 const navItems = [
   "Overview",
   "Bookings",
@@ -182,9 +190,15 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function SectionKicker({ children }: { children: React.ReactNode }) {
+function SectionKicker({
+  children,
+  className = "text-sky-700",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
+    <p className={`text-xs font-semibold uppercase tracking-[0.18em] ${className}`}>
       {children}
     </p>
   );
@@ -199,7 +213,7 @@ export default async function AdminPage() {
         <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] lg:w-64">
           <div className="rounded-2xl bg-[#102a2e] p-4 text-white shadow-xl shadow-slate-300/40 lg:min-h-full lg:rounded-none">
             <div className="border-b border-white/10 pb-5">
-              <SectionKicker>Explore Ceylon</SectionKicker>
+              <SectionKicker className="text-teal-200/70">Explore Ceylon</SectionKicker>
               <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">Admin</h1>
               <div className="mt-3 flex items-center gap-2 text-sm text-teal-100/70">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
@@ -303,6 +317,59 @@ export default async function AdminPage() {
                   </p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-5 grid gap-4 xl:grid-cols-[1.35fr_0.65fr]">
+              <div className="border border-slate-200 bg-[#f6faf9] p-4 sm:p-5">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                      Revenue pulse
+                    </p>
+                    <div className="mt-2 flex items-baseline gap-2">
+                      <p className="text-2xl font-semibold text-slate-950">$64,000</p>
+                      <span className="text-sm font-semibold text-emerald-700">+18.4%</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 rounded-full bg-white p-1 text-xs font-semibold text-slate-500 shadow-sm">
+                    <span className="rounded-full bg-slate-950 px-3 py-1.5 text-white">7 days</span>
+                    <span className="px-2.5 py-1.5">30 days</span>
+                  </div>
+                </div>
+                <div className="mt-5 flex h-20 items-end gap-2 border-b border-slate-200 pb-0">
+                  {revenuePulse.map((height, index) => (
+                    <div key={height + index} className="group relative flex h-full flex-1 items-end">
+                      <div
+                        className={`w-full transition ${index === revenuePulse.length - 1 ? "bg-[#102a2e]" : "bg-[#a8d9cb] group-hover:bg-[#69b6a2]"}`}
+                        style={{ height: `${height}%` }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2 flex justify-between text-[11px] font-medium text-slate-400">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Today</span>
+                </div>
+              </div>
+
+              <div className="border border-slate-200 bg-[#102a2e] p-4 text-white sm:p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-100/60">
+                    Attention needed
+                  </p>
+                  <span className="rounded-full bg-rose-400/15 px-2 py-1 text-xs font-semibold text-rose-200">3 open</span>
+                </div>
+                <div className="mt-4 divide-y divide-white/10">
+                  {attentionItems.map((item) => (
+                    <div key={item.label} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
+                      <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${item.tone === "amber" ? "bg-amber-300" : item.tone === "rose" ? "bg-rose-300" : "bg-sky-300"}`} />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-white">{item.label}</p>
+                        <p className="mt-0.5 truncate text-xs text-teal-100/60">{item.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
 
