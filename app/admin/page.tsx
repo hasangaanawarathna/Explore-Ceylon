@@ -1,8 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
 import { AdminContentEditor } from "@/components/AdminContentEditor";
+import { LiveOperations } from "@/components/LiveOperations";
+import { getAdminSession } from "@/lib/server/auth";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -205,6 +208,7 @@ function SectionKicker({
 }
 
 export default async function AdminPage() {
+  if (!(await getAdminSession())) redirect("/admin/login");
   const usdToLkrRate = await getUsdToLkrRate();
 
   return (
@@ -252,6 +256,7 @@ export default async function AdminPage() {
         </aside>
 
         <main className="min-w-0 flex-1 space-y-6">
+          <LiveOperations />
           <div className="flex flex-col gap-3 border-b border-slate-200/80 pb-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
