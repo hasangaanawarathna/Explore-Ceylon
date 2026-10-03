@@ -60,6 +60,7 @@ export function RoutePlanner({
   const [finishPoint, setFinishPoint] = useState(selectedDestination?.name ?? "");
   const [customStartPoint, setCustomStartPoint] = useState("");
   const [includeRestaurants, setIncludeRestaurants] = useState(true);
+  const [locationStatus, setLocationStatus] = useState("");
 
   const effectiveStartPoint = startPoint === "Custom" ? customStartPoint : startPoint;
   const effectiveFinishPoint = finishPoint.trim() || selectedDestination?.name || "";
@@ -104,6 +105,24 @@ export function RoutePlanner({
     if (destination) {
       setFinishPoint(destination.name);
     }
+  }
+
+  function useCurrentLocation() {
+    if (!("geolocation" in navigator)) {
+      setLocationStatus("Your browser does not support location access.");
+      return;
+    }
+
+    setLocationStatus("Finding your location...");
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setStartPoint("Custom");
+        setCustomStartPoint(`${coords.latitude},${coords.longitude}`);
+        setLocationStatus("Current location added as your start point.");
+      },
+      () => setLocationStatus("Location access was unavailable. Enter your town or address instead."),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
   }
 
   return (
@@ -151,6 +170,21 @@ export function RoutePlanner({
             </label>
           ) : null}
 
+          <div>
+            <button
+              type="button"
+              onClick={useCurrentLocation}
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-sky-200 bg-sky-50 px-5 py-3 text-sm font-semibold text-sky-700 transition hover:border-sky-300 hover:bg-sky-100"
+            >
+              Use my current location
+            </button>
+            {locationStatus ? (
+              <p className="mt-2 text-sm text-slate-500" role="status">
+                {locationStatus}
+              </p>
+            ) : null}
+          </div>
+
           <label className="grid gap-2 text-sm font-medium text-slate-700">
             Finishing point
             <input
@@ -178,7 +212,7 @@ export function RoutePlanner({
           rel="noreferrer"
           className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-sky-600 px-5 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-sky-600/20 transition hover:-translate-y-0.5 hover:bg-sky-500"
         >
-          Open route with restaurants
+          Open full directions in Google Maps
         </a>
       </form>
 
