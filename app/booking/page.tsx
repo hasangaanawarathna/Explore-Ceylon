@@ -1,5 +1,6 @@
 import { RoutePlanner } from "@/components/RoutePlanner";
 import { SectionTitle } from "@/components/SectionTitle";
+import { BookingRequestForm } from "@/components/BookingRequestForm";
 import { destinations, popularStartPoints, restaurantStops } from "@/lib/constants";
 
 export default function BookingPage() {
@@ -15,6 +16,7 @@ export default function BookingPage() {
         popularStartPoints={popularStartPoints}
         restaurantStops={restaurantStops}
       />
+      <BookingRequestForm destinations={destinations} />
     </div>
   );
 }
