@@ -194,25 +194,28 @@ export default async function AdminPage() {
   const usdToLkrRate = await getUsdToLkrRate();
 
   return (
-    <div className="bg-slate-100">
+    <div className="min-h-screen bg-[#edf3f5]">
       <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
         <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] lg:w-64">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:rounded-none">
-            <div className="border-b border-slate-200 pb-4">
+          <div className="rounded-2xl bg-[#102a2e] p-4 text-white shadow-xl shadow-slate-300/40 lg:min-h-full lg:rounded-none">
+            <div className="border-b border-white/10 pb-5">
               <SectionKicker>Explore Ceylon</SectionKicker>
-              <h1 className="mt-2 text-2xl font-semibold text-slate-950">Admin</h1>
-              <p className="mt-2 text-sm text-slate-500">Tuesday, Aug 4</p>
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">Admin</h1>
+              <div className="mt-3 flex items-center gap-2 text-sm text-teal-100/70">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                Tuesday, Aug 4 · Workspace live
+              </div>
             </div>
 
-            <nav className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
+            <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
               {navItems.map((item, index) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className={`block shrink-0 rounded-full px-3 py-2 text-sm font-medium transition lg:rounded-none ${
+                  className={`block shrink-0 rounded-full px-3 py-2 text-sm font-medium transition lg:rounded-lg ${
                     index === 0
-                      ? "bg-slate-950 text-white"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                      ? "bg-[#d9f3ed] text-[#102a2e]"
+                      : "text-teal-50/65 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {item}
@@ -220,21 +223,36 @@ export default async function AdminPage() {
               ))}
             </nav>
 
-            <div className="mt-6 border-t border-slate-200 pt-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+            <div className="mt-6 border-t border-white/10 pt-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-teal-100/50">
                 Today
               </p>
-              <p className="mt-2 text-sm font-semibold text-slate-950">
+              <p className="mt-2 text-sm font-semibold text-white">
                 12 live requests
               </p>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-teal-100/60">
                 4 require approval before noon.
               </p>
             </div>
           </div>
         </aside>
 
-        <main className="flex-1 space-y-6">
+        <main className="min-w-0 flex-1 space-y-6">
+          <div className="flex flex-col gap-3 border-b border-slate-200/80 pb-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Workspace / Overview
+              </p>
+              <p className="mt-1 text-sm text-slate-600">Your travel operations at a glance</p>
+            </div>
+            <div className="flex items-center gap-3 text-sm">
+              <span className="hidden text-slate-500 sm:inline">Last synced 2 min ago</span>
+              <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 font-semibold text-slate-800 shadow-sm">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#d9f3ed] text-xs text-[#102a2e]">EC</span>
+                Admin team
+              </div>
+            </div>
+          </div>
           <section
             id="overview"
             className="border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
