@@ -14,9 +14,11 @@ import {
   whyChooseUs,
 } from "@/lib/constants";
 import { getUsdToLkrRate, withBasePath } from "@/lib/utils";
+import { readDatabase } from "@/lib/server/database";
 
 export default async function Home() {
-  const usdToLkrRate = await getUsdToLkrRate();
+  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
+  const hero = database.settings.homeHero;
 
   const visualMoments = [
     {
@@ -45,8 +47,11 @@ export default async function Home() {
     <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
       <Hero
         eyebrow="Premium travel experiences in Sri Lanka"
-        title="Discover the Hidden Beauty of Sri Lanka"
-        description="Plan coastal escapes, hill-country retreats, wildlife journeys, and family adventures with curated itineraries built for memorable, low-friction travel."
+        title={hero.title}
+        description={hero.description}
+        images={hero.images}
+        autoRotate={hero.autoRotate}
+        rotationIntervalSeconds={hero.rotationIntervalSeconds}
         primaryCta={{ label: "Search tours", href: "/destinations" }}
         secondaryCta={{ label: "Explore packages", href: "/packages" }}
       />
