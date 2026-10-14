@@ -5,6 +5,19 @@ import path from "node:path";
 import { destinations, packages } from "@/lib/constants";
 import type { Booking, Database, Enquiry } from "@/lib/server/models";
 
+export const defaultHomeHero = {
+  title: "Discover the Hidden Beauty of Sri Lanka",
+  description:
+    "Plan coastal escapes, hill-country retreats, wildlife journeys, and family adventures with curated itineraries built for memorable, low-friction travel.",
+  images: [
+    "/images/ui/ceylon-coast-palms.jpg",
+    "/images/ui/ceylon-rail-hills.jpg",
+    "/images/ui/ceylon-temple-lights.jpg",
+  ],
+  autoRotate: true,
+  rotationIntervalSeconds: 120,
+};
+
 const dataDirectory = process.env.DATA_DIRECTORY
   ? path.resolve(process.env.DATA_DIRECTORY)
   : path.join(process.cwd(), "data");
@@ -21,6 +34,7 @@ function seedDatabase(): Database {
       bookingApprovalThresholdUsd: 1000,
       hideDraftPackages: true,
       requireContentReview: true,
+      homeHero: defaultHomeHero,
     },
   };
 }
@@ -36,7 +50,15 @@ async function ensureDatabase() {
 
 export async function readDatabase(): Promise<Database> {
   await ensureDatabase();
-  return JSON.parse(await readFile(databasePath, "utf8")) as Database;
+  const database = JSON.parse(await readFile(databasePath, "utf8")) as Database;
+  database.settings.homeHero = {
+    ...defaultHomeHero,
+    ...database.settings.homeHero,
+    images: database.settings.homeHero?.images?.length
+      ? database.settings.homeHero.images
+      : defaultHomeHero.images,
+  };
+  return database;
 }
 
 export async function updateDatabase<T>(mutate: (database: Database) => T | Promise<T>): Promise<T> {
