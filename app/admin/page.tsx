@@ -6,6 +6,7 @@ import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
 import { AdminContentEditor } from "@/components/AdminContentEditor";
 import { LiveOperations } from "@/components/LiveOperations";
 import { getAdminSession } from "@/lib/server/auth";
+import { readDatabase } from "@/lib/server/database";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -209,7 +210,7 @@ function SectionKicker({
 
 export default async function AdminPage() {
   if (!(await getAdminSession())) redirect("/admin/login");
-  const usdToLkrRate = await getUsdToLkrRate();
+  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
 
   return (
     <div className="min-h-screen bg-[#edf3f5]">
@@ -672,7 +673,7 @@ export default async function AdminPage() {
                   </div>
                 ))}
               </div>
-              <AdminContentEditor />
+              <AdminContentEditor initialHero={database.settings.homeHero} />
             </div>
           </section>
 
