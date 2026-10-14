@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/Button";
 import { withBasePath } from "@/lib/utils";
@@ -9,6 +12,9 @@ interface HeroProps {
   description: string;
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string };
+  images: string[];
+  autoRotate: boolean;
+  rotationIntervalSeconds: number;
 }
 
 const heroStats = [
@@ -31,7 +37,22 @@ export function Hero({
   description,
   primaryCta,
   secondaryCta,
+  images,
+  autoRotate,
+  rotationIntervalSeconds,
 }: HeroProps) {
+  const [activeImage, setActiveImage] = useState(0);
+  const currentImage = images[activeImage] ?? images[0];
+
+  useEffect(() => {
+    if (!autoRotate || images.length < 2) return;
+    const timer = window.setInterval(
+      () => setActiveImage((current) => (current + 1) % images.length),
+      rotationIntervalSeconds * 1000,
+    );
+    return () => window.clearInterval(timer);
+  }, [autoRotate, images.length, rotationIntervalSeconds]);
+
   return (
     <section className="relative isolate overflow-hidden bg-[#fff8ed]">
       <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-[linear-gradient(180deg,rgba(255,248,237,0),rgba(14,116,144,0.12))]" />
@@ -72,18 +93,33 @@ export function Hero({
 
         <div className="relative min-h-[430px] sm:min-h-[500px] lg:min-h-[560px]">
           <div className="absolute left-0 right-0 top-0 h-[68%] overflow-hidden rounded-2xl bg-teal-950 shadow-2xl shadow-teal-950/20 sm:left-8 sm:h-[74%] sm:rounded-[2rem]">
-            <Image
-              src={withBasePath("/images/ui/ceylon-coast-palms.jpg")}
-              alt="Sri Lankan coastal palms above turquoise water"
+            {currentImage && <Image
+              key={currentImage}
+              src={withBasePath(currentImage)}
+              alt="A scenic Sri Lankan travel experience"
               fill
               preload
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
-            />
+            />}
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.02),rgba(15,23,42,0.48))]" />
             <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 shadow-lg shadow-slate-950/10 sm:left-6 sm:top-6 sm:px-4 sm:text-sm">
               Island grand tour
             </div>
+            {images.length > 1 && (
+              <div className="absolute bottom-5 right-5 flex items-center gap-2 rounded-full bg-slate-950/55 px-3 py-2 backdrop-blur-sm" aria-label="Choose hero image">
+                {images.map((image, index) => (
+                  <button
+                    key={image}
+                    type="button"
+                    aria-label={`Show image ${index + 1}`}
+                    aria-current={index === activeImage}
+                    onClick={() => setActiveImage(index)}
+                    className={`h-2.5 rounded-full transition-all ${index === activeImage ? "w-7 bg-white" : "w-2.5 bg-white/55 hover:bg-white/80"}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="absolute -left-1 top-20 hidden h-44 w-36 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 lg:block">
