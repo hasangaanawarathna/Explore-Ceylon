@@ -35,6 +35,13 @@ export type SiteSettings = {
   bookingApprovalThresholdUsd: number;
   hideDraftPackages: boolean;
   requireContentReview: boolean;
+  homeHero: {
+    title: string;
+    description: string;
+    images: string[];
+    autoRotate: boolean;
+    rotationIntervalSeconds: number;
+  };
 };
 
 export type Database = {
