@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Booking, BookingStatus, Enquiry, EnquiryStatus } from "@/lib/server/models";
+import { withBasePath } from "@/lib/utils";
 
 type Dashboard = { counts: Record<string, number>; recentBookings: Booking[]; recentEnquiries: Enquiry[] };
 
@@ -12,21 +13,36 @@ export function LiveOperations() {
   const [error, setError] = useState("");
 
   async function load() {
-    const response = await fetch("/api/admin/dashboard", { cache: "no-store" });
+    const response = await fetch(withBasePath("/api/admin/dashboard"), { cache: "no-store" });
     if (!response.ok) return setError("Could not load live operational data.");
     setData(await response.json());
   }
 
-  useEffect(() => { void load(); }, []);
+  useEffect(() => {
+    let cancelled = false;
+    fetch(withBasePath("/api/admin/dashboard"), { cache: "no-store" })
+      .then(async (response) => {
+        if (cancelled) return;
+        if (!response.ok) {
+          setError("Could not load live operational data.");
+          return;
+        }
+        setData(await response.json());
+      })
+      .catch(() => {
+        if (!cancelled) setError("Could not load live operational data.");
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   async function changeStatus(kind: "bookings" | "enquiries", id: string, status: BookingStatus | EnquiryStatus) {
-    const response = await fetch(`/api/${kind}/${encodeURIComponent(id)}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ status }) });
+    const response = await fetch(withBasePath(`/api/${kind}/${encodeURIComponent(id)}`), { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ status }) });
     if (!response.ok) return setError("The status update failed.");
     await load();
   }
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch(withBasePath("/api/auth/logout"), { method: "POST" });
     router.replace("/admin/login");
     router.refresh();
   }
