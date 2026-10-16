@@ -51,6 +51,7 @@ async function delay(milliseconds: number) {
 }
 
 async function acquireWriteLock() {
+  await mkdir(dataDirectory, { recursive: true });
   const startedAt = Date.now();
   while (Date.now() - startedAt < 10_000) {
     try {
