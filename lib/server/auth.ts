@@ -4,8 +4,50 @@ import { cookies } from "next/headers";
 const cookieName = "explore_ceylon_admin";
 const maxAge = 60 * 60 * 8;
 
+const developmentCredentials = {
+  email: "admin@exploreceylon.lk",
+  password: "ChangeMe123!",
+  secret: "development-only-change-this-secret",
+};
+
+function configuredValue(name: "ADMIN_EMAIL" | "ADMIN_PASSWORD" | "AUTH_SECRET") {
+  const value = process.env[name]?.trim();
+  if (value) return value;
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(`${name} must be configured in production.`);
+  }
+
+  return name === "ADMIN_EMAIL"
+    ? developmentCredentials.email
+    : name === "ADMIN_PASSWORD"
+      ? developmentCredentials.password
+      : developmentCredentials.secret;
+}
+
 function secret() {
-  return process.env.AUTH_SECRET || "development-only-change-this-secret";
+  const value = configuredValue("AUTH_SECRET");
+  if (process.env.NODE_ENV === "production" && value.length < 32) {
+    throw new Error("AUTH_SECRET must contain at least 32 characters in production.");
+  }
+  return value;
+}
+
+function safeEqual(left: string, right: string) {
+  const leftBuffer = Buffer.from(left);
+  const rightBuffer = Buffer.from(right);
+  return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+export function verifyAdminCredentials(email: string, password: string) {
+  const configuredEmail = configuredValue("ADMIN_EMAIL").toLowerCase();
+  const configuredPassword = configuredValue("ADMIN_PASSWORD");
+
+  if (process.env.NODE_ENV === "production" && configuredPassword.length < 12) {
+    throw new Error("ADMIN_PASSWORD must contain at least 12 characters in production.");
+  }
+
+  return safeEqual(email, configuredEmail) && safeEqual(password, configuredPassword);
 }
 
 function signature(value: string) {
@@ -22,7 +64,7 @@ export function verifySessionToken(token?: string) {
   const [payload, suppliedSignature] = token.split(".");
   if (!payload || !suppliedSignature) return null;
   const expected = signature(payload);
-  if (expected.length !== suppliedSignature.length || !timingSafeEqual(Buffer.from(expected), Buffer.from(suppliedSignature))) return null;
+  if (!safeEqual(expected, suppliedSignature)) return null;
   try {
     const session = JSON.parse(Buffer.from(payload, "base64url").toString()) as { email: string; expiresAt: number };
     return session.expiresAt > Date.now() ? session : null;
