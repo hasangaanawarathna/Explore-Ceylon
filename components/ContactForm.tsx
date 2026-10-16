@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { withBasePath } from "@/lib/utils";
 
 export function ContactForm() {
   const [state, setState] = useState<{ loading: boolean; error: string; success: string }>({ loading: false, error: "", success: "" });
@@ -10,7 +11,7 @@ export function ContactForm() {
     setState({ loading: true, error: "", success: "" });
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
-    const response = await fetch("/api/enquiries", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
+    const response = await fetch(withBasePath("/api/enquiries"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
     const result = await response.json();
     if (!response.ok) return setState({ loading: false, error: result.error || "Could not send your enquiry.", success: "" });
     form.reset();
