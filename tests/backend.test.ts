@@ -35,12 +35,13 @@ test("JSON request parsing enforces object and size limits", async () => {
 });
 
 test("admin credentials are checked against configured values", () => {
+  const environment = process.env as Record<string, string | undefined>;
   const previous = {
     email: process.env.ADMIN_EMAIL,
     password: process.env.ADMIN_PASSWORD,
     nodeEnv: process.env.NODE_ENV,
   };
-  process.env.NODE_ENV = "test";
+  environment.NODE_ENV = "test";
   process.env.ADMIN_EMAIL = "owner@example.com";
   process.env.ADMIN_PASSWORD = "long-test-password";
   try {
@@ -49,7 +50,7 @@ test("admin credentials are checked against configured values", () => {
   } finally {
     process.env.ADMIN_EMAIL = previous.email;
     process.env.ADMIN_PASSWORD = previous.password;
-    process.env.NODE_ENV = previous.nodeEnv;
+    environment.NODE_ENV = previous.nodeEnv;
   }
 });
 
