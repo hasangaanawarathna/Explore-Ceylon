@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import type { Destination } from "@/types";
+import { withBasePath } from "@/lib/utils";
 
 export function BookingRequestForm({ destinations }: { destinations: Destination[] }) {
   const [state, setState] = useState({ loading: false, error: "", success: "" });
@@ -11,7 +12,7 @@ export function BookingRequestForm({ destinations }: { destinations: Destination
     setState({ loading: true, error: "", success: "" });
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
-    const response = await fetch("/api/bookings", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
+    const response = await fetch(withBasePath("/api/bookings"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
     const result = await response.json();
     if (!response.ok) return setState({ loading: false, error: result.error || "Could not submit this booking.", success: "" });
     form.reset();
