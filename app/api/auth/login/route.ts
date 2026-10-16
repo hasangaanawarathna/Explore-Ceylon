@@ -1,16 +1,16 @@
 import { cookies } from "next/headers";
 
-import { createSessionToken, sessionCookie } from "@/lib/server/auth";
-import { cleanString, jsonError } from "@/lib/server/http";
+import { createSessionToken, sessionCookie, verifyAdminCredentials } from "@/lib/server/auth";
+import { cleanString, enforceRateLimit, jsonError, readJsonObject } from "@/lib/server/http";
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => null) as Record<string, unknown> | null;
+  const limited = enforceRateLimit(request, "admin-login", 5, 15 * 60 * 1000);
+  if (limited) return limited;
+  const body = await readJsonObject(request, 4_096);
+  if (!body) return jsonError("Invalid request body.");
   const email = cleanString(body?.email, 200).toLowerCase();
   const password = cleanString(body?.password, 200);
-  const adminEmail = (process.env.ADMIN_EMAIL || "admin@exploreceylon.lk").toLowerCase();
-  const adminPassword = process.env.ADMIN_PASSWORD || "ChangeMe123!";
-
-  if (email !== adminEmail || password !== adminPassword) return jsonError("Invalid email or password.", 401);
+  if (!verifyAdminCredentials(email, password)) return jsonError("Invalid email or password.", 401);
 
   (await cookies()).set(sessionCookie.name, createSessionToken(email), {
     httpOnly: true,
