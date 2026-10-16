@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { withBasePath } from "@/lib/utils";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export function AdminLoginForm() {
     setLoading(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch(withBasePath("/api/auth/login"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
