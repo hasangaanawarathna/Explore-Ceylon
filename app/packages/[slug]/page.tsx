@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { PriceDisplay } from "@/components/PriceDisplay";
 import { SectionTitle } from "@/components/SectionTitle";
-import { getPackageBySlug, packages } from "@/lib/constants";
+import { packages } from "@/lib/constants";
+import { readDatabase } from "@/lib/server/database";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 interface PackageDetailsPageProps {
@@ -20,7 +21,8 @@ export function generateStaticParams() {
 
 export default async function PackageDetailsPage({ params }: PackageDetailsPageProps) {
   const { slug } = await params;
-  const travelPackage = getPackageBySlug(slug);
+  const database = await readDatabase();
+  const travelPackage = database.packages.find((item) => item.slug === slug);
 
   if (!travelPackage) {
     notFound();
