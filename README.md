@@ -72,6 +72,12 @@ The publishable key is designed for browser use; never add a Supabase secret/ser
 4. Add the two environment variables above to `.env.local` and GitHub repository variables, then redeploy.
 5. Verify public catalog reads and form submissions, then verify `/admin` sign-in and CRUD/status operations.
 
+### Catalog image uploads
+
+Run `supabase/migrations/003_destination_images_storage.sql` once in the Supabase SQL Editor. It creates the public `destination-images` bucket with a 5 MB limit, restricts files to JPG/PNG/WebP, permits public reads, and restricts inserts, replacements, and deletions to active administrators through `public.is_admin()`.
+
+In Admin > Supabase catalog, select or create a destination/package, choose **Upload image** (or **Replace image**), review the preview, and select **Confirm upload**. Existing records are updated immediately. For a new unsaved record, upload first and then select **Save record**. **Remove image** asks for confirmation, restores the bundled fallback image, and removes managed Storage objects without touching bundled website assets.
+
 The seed migration uses `ON CONFLICT DO NOTHING`: it never updates or deletes an existing destination, package, or settings row. The existing ignored `data/explore-ceylon.json` file remains untouched as a rollback/reference copy. If it later contains live enquiries or bookings, export and review them before importing; do not rerun them as blind inserts.
 
 ## Run

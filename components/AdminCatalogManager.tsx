@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import type { Destination, TravelPackage } from "@/types";
 import { createClient } from "@/lib/supabase/client";
 import { getCatalog } from "@/lib/supabase/repository";
-import { useEffect } from "react";
+import { deleteManagedImage, uploadCatalogImage, validateImageFile } from "@/lib/supabase/storage";
+import { withBasePath } from "@/lib/utils";
 
 type Kind = "destinations" | "packages";
 
@@ -17,13 +18,77 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
   const [selected, setSelected] = useState("");
   const [draft, setDraft] = useState(() => JSON.stringify(blankDestination, null, 2));
   const [message, setMessage] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const previewUrl = useMemo(() => imageFile ? URL.createObjectURL(imageFile) : "", [imageFile]);
 
   useEffect(() => { getCatalog().then(setItems).catch(() => setMessage("Could not refresh catalog.")); }, []);
+  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
+
+  function parsedDraft() {
+    try { return JSON.parse(draft) as Destination | TravelPackage; } catch { return null; }
+  }
 
   function choose(nextKind: Kind, slug = "") {
-    setKind(nextKind); setSelected(slug); setMessage("");
+    setKind(nextKind); setSelected(slug); setMessage(""); setImageFile(null);
     const item = items[nextKind].find((candidate) => candidate.slug === slug) ?? (nextKind === "destinations" ? blankDestination : blankPackage);
     setDraft(JSON.stringify(item, null, 2));
+  }
+
+  function selectImage(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] ?? null;
+    event.target.value = "";
+    if (!file) return;
+    const error = validateImageFile(file);
+    if (error) { setImageFile(null); setMessage(error); return; }
+    setImageFile(file); setMessage("Preview ready. Select Upload image to confirm.");
+  }
+
+  async function uploadImage() {
+    const item = parsedDraft();
+    if (!item || !imageFile) return setMessage("Choose an image and make sure the record JSON is valid.");
+    setUploading(true); setMessage("Uploading image...");
+    let uploadedPath = "";
+    try {
+      const oldImage = item.image;
+      const uploaded = await uploadCatalogImage(imageFile, kind, item.slug);
+      uploadedPath = uploaded.path;
+      const table = kind === "destinations" ? "destinations" : "travel_packages";
+      if (selected) {
+        const { error } = await createClient().from(table).update({ image: uploaded.publicUrl }).eq("slug", selected);
+        if (error) throw error;
+      }
+      const nextItem = { ...item, image: uploaded.publicUrl } as Destination | TravelPackage;
+      setDraft(JSON.stringify(nextItem, null, 2));
+      setItems((current) => ({ ...current, [kind]: current[kind].map((candidate) => candidate.slug === selected ? nextItem : candidate) }));
+      setImageFile(null);
+      if (selected) await deleteManagedImage(oldImage);
+      setMessage(selected ? "Image uploaded and record updated." : "Image uploaded. Save the new record to store its URL.");
+    } catch (error) {
+      if (uploadedPath) await createClient().storage.from("destination-images").remove([uploadedPath]).catch(() => undefined);
+      setMessage(error instanceof Error ? error.message : "Image upload failed.");
+    } finally { setUploading(false); }
+  }
+
+  async function removeImage() {
+    const item = parsedDraft();
+    if (!item?.image || !window.confirm("Remove this image from the record? The uploaded Storage object will also be deleted.")) return;
+    const oldImage = item.image;
+    const fallback = "/images/hero-sri-lanka.svg";
+    setUploading(true); setMessage("Removing image...");
+    try {
+      if (selected) {
+        const table = kind === "destinations" ? "destinations" : "travel_packages";
+        const { error } = await createClient().from(table).update({ image: fallback }).eq("slug", selected);
+        if (error) throw error;
+      }
+      await deleteManagedImage(oldImage);
+      const nextItem = { ...item, image: fallback } as Destination | TravelPackage;
+      setDraft(JSON.stringify(nextItem, null, 2)); setImageFile(null);
+      setItems((current) => ({ ...current, [kind]: current[kind].map((candidate) => candidate.slug === selected ? nextItem : candidate) }));
+      setMessage("Image removed.");
+    } catch (error) { setMessage(error instanceof Error ? error.message : "Could not remove the image."); }
+    finally { setUploading(false); }
   }
 
   async function save() {
@@ -60,6 +125,28 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
       </div>
       <div>
         <p className="text-sm text-slate-600">Edit the structured record. Arrays such as activities and features must remain JSON arrays.</p>
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div className="grid gap-4 sm:grid-cols-[12rem_1fr] sm:items-start">
+            <div className="aspect-[4/3] overflow-hidden rounded-lg bg-slate-200">
+              {/* A plain img supports local previews and remote Supabase URLs in static exports. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={previewUrl || withBasePath(parsedDraft()?.image || "/images/hero-sri-lanka.svg")} alt="Selected catalog image preview" className="h-full w-full object-cover" />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-950">Catalog photograph</p>
+              <p className="mt-1 text-sm leading-6 text-slate-600">JPG, PNG, or WebP. Maximum file size: 5 MB.</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <label className="cursor-pointer rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">
+                  {parsedDraft()?.image && parsedDraft()?.image !== "/images/hero-sri-lanka.svg" ? "Replace image" : "Upload image"}
+                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={selectImage} className="sr-only" />
+                </label>
+                {imageFile && <button type="button" onClick={uploadImage} disabled={uploading} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{uploading ? "Uploading..." : "Confirm upload"}</button>}
+                {parsedDraft()?.image && parsedDraft()?.image !== "/images/hero-sri-lanka.svg" && <button type="button" onClick={removeImage} disabled={uploading} className="rounded-lg border border-rose-300 px-4 py-2 text-sm font-semibold text-rose-700 disabled:opacity-50">Remove image</button>}
+              </div>
+              {imageFile && <p className="mt-3 text-xs text-slate-500">{imageFile.name} · {(imageFile.size / 1024 / 1024).toFixed(2)} MB</p>}
+            </div>
+          </div>
+        </div>
         <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows={18} spellCheck={false} className="mt-3 w-full rounded-lg border border-slate-300 bg-slate-950 p-4 font-mono text-xs text-slate-100 outline-none focus:border-sky-500" />
         <div className="mt-3 flex flex-wrap items-center gap-3"><button onClick={save} className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white">Save record</button>{selected && <button onClick={remove} className="rounded-lg border border-rose-300 px-4 py-2 text-sm font-semibold text-rose-700">Delete</button>}<span className="text-sm text-slate-600">{message}</span></div>
       </div>
