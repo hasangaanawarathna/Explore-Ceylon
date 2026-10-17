@@ -1,22 +1,26 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import type { Destination } from "@/types";
-import { withBasePath } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { publicId } from "@/lib/supabase/repository";
+import { getCatalog } from "@/lib/supabase/repository";
 
 export function BookingRequestForm({ destinations }: { destinations: Destination[] }) {
   const [state, setState] = useState({ loading: false, error: "", success: "" });
+  const [availableDestinations, setAvailableDestinations] = useState(destinations);
+  useEffect(() => { getCatalog().then((catalog) => setAvailableDestinations(catalog.destinations)).catch(() => undefined); }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ loading: true, error: "", success: "" });
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
-    const response = await fetch(withBasePath("/api/bookings"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
-    const result = await response.json();
-    if (!response.ok) return setState({ loading: false, error: result.error || "Could not submit this booking.", success: "" });
+    const id = publicId("EC");
+    const { error } = await createClient().from("bookings").insert({ id, name: String(values.name).trim(), email: String(values.email).trim().toLowerCase(), phone: String(values.phone).trim(), destination: String(values.destination).trim(), start_point: String(values.startPoint).trim(), finish_point: String(values.finishPoint).trim(), travel_date: String(values.travelDate), guests: Number(values.guests), notes: String(values.notes ?? "").trim() || null, status: "pending" });
+    if (error) return setState({ loading: false, error: "Could not submit this booking. Please verify the form and try again.", success: "" });
     form.reset();
-    setState({ loading: false, error: "", success: result.message });
+    setState({ loading: false, error: "", success: `Booking request ${id} has been received.` });
   }
 
   const field = "h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:text-sm";
@@ -28,7 +32,7 @@ export function BookingRequestForm({ destinations }: { destinations: Destination
         <label className="grid gap-2 text-sm font-medium">Full name<input name="name" required className={field} /></label>
         <label className="grid gap-2 text-sm font-medium">Email<input name="email" type="email" required className={field} /></label>
         <label className="grid gap-2 text-sm font-medium">Phone<input name="phone" required className={field} /></label>
-        <label className="grid gap-2 text-sm font-medium">Destination<select name="destination" required className={field}>{destinations.map((item) => <option key={item.slug}>{item.name}</option>)}</select></label>
+        <label className="grid gap-2 text-sm font-medium">Destination<select name="destination" required className={field}>{availableDestinations.map((item) => <option key={item.slug}>{item.name}</option>)}</select></label>
         <label className="grid gap-2 text-sm font-medium">Start point<input name="startPoint" required placeholder="Airport, hotel, or town" className={field} /></label>
         <label className="grid gap-2 text-sm font-medium">Finish point<input name="finishPoint" required placeholder="Final town or hotel" className={field} /></label>
         <label className="grid gap-2 text-sm font-medium">Travel date<input name="travelDate" type="date" required min={new Date().toISOString().slice(0, 10)} className={field} /></label>

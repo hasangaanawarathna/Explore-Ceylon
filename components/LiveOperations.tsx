@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Booking, BookingStatus, Enquiry, EnquiryStatus } from "@/lib/server/models";
-import { withBasePath } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { bookingFromRow, enquiryFromRow } from "@/lib/supabase/repository";
 
 type Dashboard = { counts: Record<string, number>; recentBookings: Booking[]; recentEnquiries: Enquiry[] };
 
@@ -13,36 +14,36 @@ export function LiveOperations() {
   const [error, setError] = useState("");
 
   async function load() {
-    const response = await fetch(withBasePath("/api/admin/dashboard"), { cache: "no-store" });
-    if (!response.ok) return setError("Could not load live operational data.");
-    setData(await response.json());
+    const supabase = createClient();
+    const [bookings, enquiries, newEnquiries, openBookings, confirmedTrips] = await Promise.all([
+      supabase.from("bookings").select("*").order("created_at", { ascending: false }).limit(10),
+      supabase.from("enquiries").select("*").order("created_at", { ascending: false }).limit(10),
+      supabase.from("enquiries").select("id", { count: "exact", head: true }).eq("status", "new"),
+      supabase.from("bookings").select("id", { count: "exact", head: true }).in("status", ["pending", "approved", "paid"]),
+      supabase.from("bookings").select("id", { count: "exact", head: true }).in("status", ["approved", "paid"]),
+    ]);
+    if (bookings.error || enquiries.error || newEnquiries.error || openBookings.error || confirmedTrips.error) return setError("Could not load live operational data.");
+    const recentBookings = (bookings.data ?? []).map(bookingFromRow);
+    const recentEnquiries = (enquiries.data ?? []).map(enquiryFromRow);
+    setData({ recentBookings, recentEnquiries, counts: { newEnquiries: newEnquiries.count ?? 0, openBookings: openBookings.count ?? 0, confirmedTrips: confirmedTrips.count ?? 0 } });
   }
 
   useEffect(() => {
     let cancelled = false;
-    fetch(withBasePath("/api/admin/dashboard"), { cache: "no-store" })
-      .then(async (response) => {
-        if (cancelled) return;
-        if (!response.ok) {
-          setError("Could not load live operational data.");
-          return;
-        }
-        setData(await response.json());
-      })
-      .catch(() => {
+    const timer = window.setTimeout(() => { load().catch(() => {
         if (!cancelled) setError("Could not load live operational data.");
-      });
-    return () => { cancelled = true; };
+      }); }, 0);
+    return () => { cancelled = true; window.clearTimeout(timer); };
   }, []);
 
   async function changeStatus(kind: "bookings" | "enquiries", id: string, status: BookingStatus | EnquiryStatus) {
-    const response = await fetch(withBasePath(`/api/${kind}/${encodeURIComponent(id)}`), { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ status }) });
-    if (!response.ok) return setError("The status update failed.");
+    const { error } = await createClient().from(kind).update({ status }).eq("id", id);
+    if (error) return setError("The status update failed.");
     await load();
   }
 
   async function logout() {
-    await fetch(withBasePath("/api/auth/logout"), { method: "POST" });
+    await createClient().auth.signOut();
     router.replace("/admin/login");
     router.refresh();
   }

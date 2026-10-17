@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import type { Destination, TravelPackage } from "@/types";
-import { withBasePath } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { getCatalog } from "@/lib/supabase/repository";
+import { useEffect } from "react";
 
 type Kind = "destinations" | "packages";
 
@@ -16,6 +18,8 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
   const [draft, setDraft] = useState(() => JSON.stringify(blankDestination, null, 2));
   const [message, setMessage] = useState("");
 
+  useEffect(() => { getCatalog().then(setItems).catch(() => setMessage("Could not refresh catalog.")); }, []);
+
   function choose(nextKind: Kind, slug = "") {
     setKind(nextKind); setSelected(slug); setMessage("");
     const item = items[nextKind].find((candidate) => candidate.slug === slug) ?? (nextKind === "destinations" ? blankDestination : blankPackage);
@@ -26,18 +30,21 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
     setMessage("Saving...");
     try {
       const item = JSON.parse(draft) as Destination | TravelPackage;
-      const response = await fetch(withBasePath("/api/catalog"), { method: selected ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind, item }) });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Save failed.");
-      setItems((current) => ({ ...current, [kind]: [...current[kind].filter((candidate) => candidate.slug !== result.item.slug), result.item] }));
-      setSelected(result.item.slug); setMessage("Saved.");
+      const supabase = createClient();
+      const { error } = kind === "destinations"
+        ? await supabase.from("destinations").upsert({ slug: item.slug, name: (item as Destination).name, location: (item as Destination).location, region: (item as Destination).region, summary: item.summary, image: item.image, price_usd: item.priceUsd, duration: item.duration, best_time: (item as Destination).bestTime, activities: (item as Destination).activities, google_maps_url: (item as Destination).googleMapsUrl, is_published: true }, { onConflict: "slug" })
+        : await supabase.from("travel_packages").upsert({ slug: item.slug, title: (item as TravelPackage).title, summary: item.summary, image: item.image, price_usd: item.priceUsd, duration: item.duration, category: (item as TravelPackage).category, features: (item as TravelPackage).features, is_published: true }, { onConflict: "slug" });
+      if (error) throw error;
+      setItems((current) => ({ ...current, [kind]: [...current[kind].filter((candidate) => candidate.slug !== item.slug), item] }));
+      setSelected(item.slug); setMessage("Saved.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Invalid JSON."); }
   }
 
   async function remove() {
     if (!selected || !window.confirm(`Delete ${selected}? This cannot be undone.`)) return;
-    const response = await fetch(withBasePath("/api/catalog"), { method: "DELETE", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind, slug: selected }) });
-    if (!response.ok) return setMessage("Delete failed.");
+    const table = kind === "destinations" ? "destinations" : "travel_packages";
+    const { error } = await createClient().from(table).delete().eq("slug", selected);
+    if (error) return setMessage("Delete failed.");
     setItems((current) => ({ ...current, [kind]: current[kind].filter((candidate) => candidate.slug !== selected) }));
     choose(kind); setMessage("Deleted.");
   }

@@ -1,12 +1,18 @@
 "use client";
 
-import { createBrowserClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseConfig } from "@/lib/supabase/config";
 
-let client: ReturnType<typeof createBrowserClient> | undefined;
+// The SQL migrations are the schema source of truth; generated database types can
+// replace this untyped client later without changing callers.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let client: ReturnType<typeof createSupabaseClient<any>> | undefined;
 
 export function createClient() {
   const { url, publishableKey } = requireSupabaseConfig();
-  client ??= createBrowserClient(url, publishableKey);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client ??= createSupabaseClient<any>(url, publishableKey, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+  });
   return client;
 }

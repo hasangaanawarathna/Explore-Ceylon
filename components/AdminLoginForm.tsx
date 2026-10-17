@@ -2,7 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { withBasePath } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { assertAdmin } from "@/lib/supabase/repository";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -14,14 +15,11 @@ export function AdminLoginForm() {
     setLoading(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const response = await fetch(withBasePath("/api/auth/login"), {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
-    });
-    const result = await response.json();
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email: String(form.get("email")), password: String(form.get("password")) });
+    const admin = signInError ? null : await assertAdmin();
     setLoading(false);
-    if (!response.ok) return setError(result.error || "Login failed.");
+    if (!admin) { await supabase.auth.signOut(); return setError(signInError ? "Invalid email or password." : "This account is not authorized for administration."); }
     router.replace("/admin");
     router.refresh();
   }

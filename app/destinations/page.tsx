@@ -1,12 +1,11 @@
-import { DestinationCard } from "@/components/DestinationCard";
+import { DynamicDestinations } from "@/components/DynamicCatalogGrid";
 import { SearchBar } from "@/components/SearchBar";
 import { SectionTitle } from "@/components/SectionTitle";
-import { readDatabase } from "@/lib/server/database";
+import { destinations } from "@/lib/constants";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 export default async function DestinationsPage() {
-  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
-  const { destinations } = database;
+  const usdToLkrRate = await getUsdToLkrRate();
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-12 sm:space-y-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
@@ -16,15 +15,7 @@ export default async function DestinationsPage() {
         description="Use the search panel to explore the island by season, style, and travel goals."
       />
       <SearchBar />
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {destinations.map((destination) => (
-          <DestinationCard
-            key={destination.slug}
-            destination={destination}
-            usdToLkrRate={usdToLkrRate}
-          />
-        ))}
-      </div>
+      <DynamicDestinations initial={destinations} usdToLkrRate={usdToLkrRate} />
     </div>
   );
 }

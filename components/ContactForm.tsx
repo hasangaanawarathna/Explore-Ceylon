@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { withBasePath } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { publicId } from "@/lib/supabase/repository";
 
 export function ContactForm() {
   const [state, setState] = useState<{ loading: boolean; error: string; success: string }>({ loading: false, error: "", success: "" });
@@ -11,11 +12,10 @@ export function ContactForm() {
     setState({ loading: true, error: "", success: "" });
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
-    const response = await fetch(withBasePath("/api/enquiries"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(values) });
-    const result = await response.json();
-    if (!response.ok) return setState({ loading: false, error: result.error || "Could not send your enquiry.", success: "" });
+    const { error } = await createClient().from("enquiries").insert({ id: publicId("ENQ"), name: String(values.name).trim(), email: String(values.email).trim().toLowerCase(), phone: String(values.phone ?? "").trim() || null, subject: String(values.subject).trim(), message: String(values.message).trim(), status: "new" });
+    if (error) return setState({ loading: false, error: "Could not send your enquiry. Please verify the form and try again.", success: "" });
     form.reset();
-    setState({ loading: false, error: "", success: result.message });
+    setState({ loading: false, error: "", success: "Your enquiry has been received." });
   }
 
   return (

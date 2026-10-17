@@ -4,7 +4,6 @@ import { Button } from "@/components/Button";
 import { PriceDisplay } from "@/components/PriceDisplay";
 import { SectionTitle } from "@/components/SectionTitle";
 import { packages } from "@/lib/constants";
-import { readDatabase } from "@/lib/server/database";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 interface PackageDetailsPageProps {
@@ -19,10 +18,11 @@ export function generateStaticParams() {
   }));
 }
 
+export const dynamicParams = false;
+
 export default async function PackageDetailsPage({ params }: PackageDetailsPageProps) {
   const { slug } = await params;
-  const database = await readDatabase();
-  const travelPackage = database.packages.find((item) => item.slug === slug);
+  const travelPackage = packages.find((item) => item.slug === slug);
 
   if (!travelPackage) {
     notFound();

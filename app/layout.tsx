@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "destinations",
     "travel blog",
   ],
-  metadataBase: new URL("https://explore-ceylon.vercel.app"),
+  metadataBase: new URL("https://hasangaanawarathna.github.io/Explore-Ceylon/"),
   openGraph: {
     title: "Explore Ceylon",
     description:

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import type { SiteSettings } from "@/lib/server/models";
 import { withBasePath } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+import { getSettings } from "@/lib/supabase/repository";
+import { useEffect } from "react";
 
 const suggestedImages = [
   { src: "/images/ui/ceylon-coast-palms.jpg", label: "Southern coast" },
@@ -18,6 +21,8 @@ type HeroSettings = SiteSettings["homeHero"];
 export function AdminContentEditor({ initialHero }: { initialHero: HeroSettings }) {
   const [hero, setHero] = useState(initialHero);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  useEffect(() => { getSettings().then((settings) => setHero(settings.homeHero)).catch(() => setStatus("error")); }, []);
 
   function toggleImage(src: string) {
     setHero((current) => ({ ...current, images: current.images.includes(src)
@@ -37,11 +42,10 @@ export function AdminContentEditor({ initialHero }: { initialHero: HeroSettings 
 
   async function saveContent() {
     setStatus("saving");
-    const response = await fetch(withBasePath("/api/settings"), {
-      method: "PATCH", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ homeHero: hero }),
-    });
-    setStatus(response.ok ? "saved" : "error");
+    const { data } = await createClient().from("site_settings").select("value").eq("key", "main").single();
+    const value = { ...(data?.value as Record<string, unknown> ?? {}), homeHero: hero };
+    const { error } = await createClient().from("site_settings").upsert({ key: "main", value });
+    setStatus(error ? "error" : "saved");
   }
 
   return (
