@@ -1,5 +1,5 @@
 import { requireAdmin } from "@/lib/server/auth";
-import { updateDatabase } from "@/lib/server/database";
+import { updateRecordStatus } from "@/lib/server/database";
 import { cleanString, jsonError } from "@/lib/server/http";
 import type { BookingStatus } from "@/lib/server/models";
 
@@ -11,10 +11,6 @@ export async function PATCH(request: Request, context: RouteContext<"/api/bookin
   const body = await request.json().catch(() => null) as Record<string, unknown> | null;
   const status = cleanString(body?.status) as BookingStatus;
   if (!statuses.includes(status)) return jsonError("Invalid booking status.");
-  const booking = await updateDatabase((database) => {
-    const item = database.bookings.find((candidate) => candidate.id === id);
-    if (item) Object.assign(item, { status, updatedAt: new Date().toISOString() });
-    return item;
-  });
+  const booking = await updateRecordStatus("bookings", id, status);
   return booking ? Response.json({ booking }) : jsonError("Booking not found.", 404);
 }
