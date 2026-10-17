@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { PriceDisplay } from "@/components/PriceDisplay";
 import { SectionTitle } from "@/components/SectionTitle";
-import { destinations, getDestinationBySlug } from "@/lib/constants";
+import { destinations } from "@/lib/constants";
+import { readDatabase } from "@/lib/server/database";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 interface DestinationDetailsPageProps {
@@ -20,7 +21,8 @@ export function generateStaticParams() {
 
 export default async function DestinationDetailsPage({ params }: DestinationDetailsPageProps) {
   const { slug } = await params;
-  const destination = getDestinationBySlug(slug);
+  const database = await readDatabase();
+  const destination = database.destinations.find((item) => item.slug === slug);
 
   if (!destination) {
     notFound();
