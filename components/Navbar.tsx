@@ -1,17 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/Button";
+import { ResilientImage } from "@/components/ResilientImage";
 import { navigationItems } from "@/lib/constants";
-import { withBasePath } from "@/lib/utils";
 
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <Image
-            src={withBasePath("/icons/explore-mark.svg")}
+          <ResilientImage
+            src="/icons/explore-mark.svg"
             alt="Explore Ceylon"
             width={34}
             height={34}
@@ -39,7 +38,10 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link href="/admin" className="text-sm font-semibold text-slate-600 transition hover:text-sky-700">
+            Admin Login
+          </Link>
           <Button href="/booking">Book Now</Button>
         </div>
 
@@ -69,6 +71,9 @@ export function Navbar() {
             <Button href="/booking" className="mt-4 w-full">
               Book Now
             </Button>
+            <Link href="/admin" className="mt-2 block rounded-xl px-4 py-3 text-center text-sm font-semibold text-slate-600 hover:bg-slate-50 sm:rounded-2xl">
+              Admin Login
+            </Link>
           </div>
         </details>
       </div>

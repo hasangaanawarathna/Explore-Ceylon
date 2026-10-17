@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { PriceDisplay } from "@/components/PriceDisplay";
+import { ResilientImage } from "@/components/ResilientImage";
 import type { TravelPackage } from "@/types";
-import { withBasePath } from "@/lib/utils";
 
 interface PackageCardProps {
   travelPackage: TravelPackage;
@@ -16,12 +16,11 @@ export function PackageCard({ travelPackage, usdToLkrRate }: PackageCardProps) {
       className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 text-white shadow-xl shadow-slate-900/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-[2rem]"
     >
       <div
-        className="flex h-48 flex-col justify-between bg-cover bg-center p-5 sm:h-56 sm:p-6"
-        style={{
-          backgroundImage: `linear-gradient(135deg,rgba(2,6,23,0.9),rgba(15,23,42,0.6)),url('${withBasePath(travelPackage.image)}')`,
-        }}
+        className="relative flex h-48 flex-col justify-between overflow-hidden p-5 sm:h-56 sm:p-6"
       >
-        <div className="flex items-center justify-between gap-3">
+        <ResilientImage src={travelPackage.image} alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(2,6,23,0.9),rgba(15,23,42,0.6))]" />
+        <div className="relative flex items-center justify-between gap-3">
           <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200 backdrop-blur sm:tracking-[0.2em]">
             {travelPackage.category}
           </span>
@@ -29,7 +28,7 @@ export function PackageCard({ travelPackage, usdToLkrRate }: PackageCardProps) {
             {travelPackage.duration}
           </span>
         </div>
-        <div>
+        <div className="relative">
           <PriceDisplay
             usdAmount={travelPackage.priceUsd}
             usdToLkrRate={usdToLkrRate}

@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/Button";
-import { withBasePath } from "@/lib/utils";
+import { ResilientImage } from "@/components/ResilientImage";
 
 interface HeroProps {
   eyebrow: string;
@@ -93,9 +92,9 @@ export function Hero({
 
         <div className="relative min-h-[430px] sm:min-h-[500px] lg:min-h-[560px]">
           <div className="absolute left-0 right-0 top-0 h-[68%] overflow-hidden rounded-2xl bg-teal-950 shadow-2xl shadow-teal-950/20 sm:left-8 sm:h-[74%] sm:rounded-[2rem]">
-            {currentImage && <Image
+            {currentImage && <ResilientImage
               key={currentImage}
-              src={withBasePath(currentImage)}
+              src={currentImage}
               alt="A scenic Sri Lankan travel experience"
               fill
               preload
@@ -123,8 +122,8 @@ export function Hero({
           </div>
 
           <div className="absolute -left-1 top-20 hidden h-44 w-36 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 lg:block">
-            <Image
-              src={withBasePath("/images/ui/ceylon-rail-hills.jpg")}
+            <ResilientImage
+              src="/images/ui/ceylon-rail-hills.jpg"
               alt=""
               fill
               sizes="144px"
@@ -133,8 +132,8 @@ export function Hero({
           </div>
 
           <div className="absolute right-0 top-[42%] hidden h-32 w-48 overflow-hidden rounded-[1.25rem] border-4 border-white bg-white shadow-2xl shadow-slate-950/20 xl:block">
-            <Image
-              src={withBasePath("/images/ui/ceylon-temple-lights.jpg")}
+            <ResilientImage
+              src="/images/ui/ceylon-temple-lights.jpg"
               alt=""
               fill
               sizes="192px"

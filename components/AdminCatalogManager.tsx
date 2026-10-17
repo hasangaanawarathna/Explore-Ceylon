@@ -49,6 +49,7 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
     if (!item || !imageFile) return setMessage("Choose an image and make sure the record JSON is valid.");
     setUploading(true); setMessage("Uploading image...");
     let uploadedPath = "";
+    let recordUpdated = false;
     try {
       const oldImage = item.image;
       const uploaded = await uploadCatalogImage(imageFile, kind, item.slug);
@@ -57,15 +58,19 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
       if (selected) {
         const { error } = await createClient().from(table).update({ image: uploaded.publicUrl }).eq("slug", selected);
         if (error) throw error;
+        recordUpdated = true;
       }
       const nextItem = { ...item, image: uploaded.publicUrl } as Destination | TravelPackage;
       setDraft(JSON.stringify(nextItem, null, 2));
       setItems((current) => ({ ...current, [kind]: current[kind].map((candidate) => candidate.slug === selected ? nextItem : candidate) }));
       setImageFile(null);
-      if (selected) await deleteManagedImage(oldImage);
+      if (selected) {
+        try { await deleteManagedImage(oldImage); }
+        catch { setMessage("Image updated. The previous Storage object could not be removed."); return; }
+      }
       setMessage(selected ? "Image uploaded and record updated." : "Image uploaded. Save the new record to store its URL.");
     } catch (error) {
-      if (uploadedPath) await createClient().storage.from("destination-images").remove([uploadedPath]).catch(() => undefined);
+      if (uploadedPath && !recordUpdated) await createClient().storage.from("destination-images").remove([uploadedPath]).catch(() => undefined);
       setMessage(error instanceof Error ? error.message : "Image upload failed.");
     } finally { setUploading(false); }
   }

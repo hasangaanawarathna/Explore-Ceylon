@@ -3,12 +3,10 @@ export function cn(...classes: Array<string | false | null | undefined>) {
 }
 
 export const SITE_BASE_PATH =
-  process.env.GITHUB_ACTIONS === "true"
-    ? process.env.NEXT_PUBLIC_BASE_PATH ?? ""
-    : "";
+  process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
 
 export function withBasePath(path: string) {
-  if (!path.startsWith("/")) {
+  if (!path.startsWith("/") || (SITE_BASE_PATH && (path === SITE_BASE_PATH || path.startsWith(`${SITE_BASE_PATH}/`)))) {
     return path;
   }
 

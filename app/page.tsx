@@ -1,10 +1,9 @@
-import Image from "next/image";
-
 import { Button } from "@/components/Button";
 import { DynamicDestinations, DynamicPackages } from "@/components/DynamicCatalogGrid";
 import { DynamicHero } from "@/components/DynamicHero";
 import { SearchBar } from "@/components/SearchBar";
 import { SectionTitle } from "@/components/SectionTitle";
+import { ResilientImage } from "@/components/ResilientImage";
 import {
   blogPosts,
   destinations,
@@ -12,7 +11,7 @@ import {
   testimonials,
   whyChooseUs,
 } from "@/lib/constants";
-import { getUsdToLkrRate, withBasePath } from "@/lib/utils";
+import { getUsdToLkrRate } from "@/lib/utils";
 import { defaultHomeHero } from "@/lib/defaults";
 
 export default async function Home() {
@@ -70,8 +69,8 @@ export default async function Home() {
                 key={moment.src}
               className={`relative overflow-hidden rounded-2xl bg-white/5 shadow-xl shadow-black/20 sm:rounded-[1.5rem] ${moment.className}`}
               >
-                <Image
-                  src={withBasePath(moment.src)}
+                <ResilientImage
+                  src={moment.src}
                   alt={moment.alt}
                   fill
                   sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"

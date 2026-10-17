@@ -1,8 +1,9 @@
 import Link from "next/link";
 
 import { PriceDisplay } from "@/components/PriceDisplay";
+import { ResilientImage } from "@/components/ResilientImage";
 import type { Destination } from "@/types";
-import { cn, withBasePath } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface DestinationCardProps {
   destination: Destination;
@@ -24,13 +25,14 @@ export function DestinationCard({ destination, usdToLkrRate }: DestinationCardPr
       <Link href={`/destinations/${destination.slug}`} className="block">
         <div
           className={cn(
-            "flex h-44 flex-col justify-between bg-cover bg-center bg-blend-multiply p-5 text-white sm:h-52 sm:p-6",
+            "relative flex h-44 flex-col justify-between overflow-hidden p-5 text-white sm:h-52 sm:p-6",
             destinationGradients[destination.name] ??
               "from-slate-700 via-slate-800 to-slate-950",
           )}
-          style={{ backgroundImage: `linear-gradient(135deg,rgba(15,23,42,0.28),rgba(15,23,42,0.68)),url('${withBasePath(destination.image)}')` }}
         >
-          <div className="flex items-center justify-between gap-3">
+          <ResilientImage src={destination.image} alt="" fill sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.28),rgba(15,23,42,0.68))]" />
+          <div className="relative flex items-center justify-between gap-3">
             <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] backdrop-blur sm:tracking-[0.2em]">
               {destination.region}
             </span>
@@ -38,7 +40,7 @@ export function DestinationCard({ destination, usdToLkrRate }: DestinationCardPr
               {destination.duration}
             </span>
           </div>
-          <div>
+          <div className="relative">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80 sm:text-sm sm:tracking-[0.24em]">
               {destination.location}
             </p>

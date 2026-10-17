@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
 const basePath =
-  process.env.GITHUB_ACTIONS === "true"
-    ? process.env.NEXT_PUBLIC_BASE_PATH ?? ""
-    : "";
+  process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const supabaseImagePattern = supabaseUrl
+  ? new URL("/storage/v1/object/public/**", supabaseUrl)
+  : undefined;
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -11,11 +13,11 @@ const nextConfig: NextConfig = {
   ...(basePath
     ? {
         basePath,
-        assetPrefix: `${basePath}/`,
       }
     : {}),
   images: {
     unoptimized: true,
+    ...(supabaseImagePattern ? { remotePatterns: [supabaseImagePattern] } : {}),
   },
 };
 

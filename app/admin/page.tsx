@@ -244,6 +244,12 @@ export default function AdminPage() {
             </nav>
 
             <div className="mt-6 border-t border-white/10 pt-4">
+              <Link
+                href="/"
+                className="mb-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#102a2e] transition hover:bg-teal-50"
+              >
+                View Website
+              </Link>
               <p className="text-xs uppercase tracking-[0.18em] text-teal-100/50">
                 Today
               </p>
