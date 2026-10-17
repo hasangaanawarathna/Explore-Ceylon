@@ -24,21 +24,19 @@ Frontend
 - TypeScript
 - Tailwind CSS
 
-Backend
+Data and authentication
 
-- Next.js Route Handlers on Node.js
-- Supabase Auth with server-validated administrator sessions
+- Supabase browser authentication
 - Supabase PostgreSQL with Row Level Security
 
 Database
 
-- Supabase PostgreSQL in configured environments
-- Local JSON remains only as a development fallback when Supabase variables are absent
+- Supabase PostgreSQL, accessed directly with the publishable key under RLS
 
 Deployment
 
-- Vercel for frontend
-- Render for backend
+- GitHub Pages static hosting
+- GitHub Actions static export deployment
 
 ## Project Structure
 
@@ -57,21 +55,21 @@ npm install
 
 ## Configure
 
-Set these values locally and in the hosting provider's encrypted environment settings:
+Set these values locally and as GitHub repository variables under Settings > Secrets and variables > Actions > Variables:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://ttdlyhasckupbzngcrez.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-project-publishable-key
 ```
 
-The publishable key is designed for browser use; never add a Supabase secret/service-role key to this application. Database writes remain protected by RLS and server-side administrator checks.
+The publishable key is designed for browser use; never add a Supabase secret/service-role key. Authentication plus RLS protect administrator reads and writes.
 
 ## Supabase setup and safe migration
 
 1. In the Supabase SQL Editor, run `supabase/migrations/001_initial_schema.sql` and then `002_seed_existing_content.sql`.
 2. In Authentication > Users, create the administrator account. Do not put its password in SQL or an environment variable.
 3. Edit the placeholder email in `supabase/ADMIN_SETUP.sql`, run it once, and verify a row exists in `admin_profiles`.
-4. Add the two environment variables above to `.env.local` and the deployment provider, then restart/redeploy.
+4. Add the two environment variables above to `.env.local` and GitHub repository variables, then redeploy.
 5. Verify public catalog reads and form submissions, then verify `/admin` sign-in and CRUD/status operations.
 
 The seed migration uses `ON CONFLICT DO NOTHING`: it never updates or deletes an existing destination, package, or settings row. The existing ignored `data/explore-ceylon.json` file remains untouched as a rollback/reference copy. If it later contains live enquiries or bookings, export and review them before importing; do not rerun them as blind inserts.
@@ -82,27 +80,21 @@ The seed migration uses `ON CONFLICT DO NOTHING`: it never updates or deletes an
 npm run dev
 ```
 
-Production builds require a Node.js host rather than static GitHub Pages hosting:
+Create the GitHub Pages static export:
 
 ```bash
 npm run build
-npm start
 ```
 
-No persistent filesystem is required after Supabase is configured. The deployment runtime must support Next.js Route Handlers and cookies (for example, Vercel or a Node.js host); static export hosting is not supported.
+The output is written to `out/`. The workflow deploys that directory to GitHub Pages.
 
-## Backend API
+## Static-host architecture
 
-- `POST /api/enquiries` creates a customer enquiry.
-- `GET /api/enquiries` lists enquiries for an authenticated administrator.
-- `PATCH /api/enquiries/:id` changes an enquiry status.
-- `POST /api/bookings` creates a booking request.
-- `GET /api/bookings` lists bookings for an authenticated administrator.
-- `PATCH /api/bookings/:id` changes a booking status.
-- `POST /api/auth/login` and `/api/auth/logout` manage the admin session.
-- `GET /api/admin/dashboard` returns live operational totals and recent records.
-- `GET /api/catalog` returns destinations and packages.
-- `GET/PATCH /api/settings` reads and updates protected admin settings.
+- Public catalog/settings reads and booking/enquiry inserts use the Supabase browser client.
+- Admin sign-in uses Supabase Auth. The dashboard also verifies an active `admin_profiles` row.
+- Admin catalog, settings, booking, and enquiry changes are enforced by RLS.
+- GitHub Pages cannot securely provide server-side rate limiting, CAPTCHA secret verification, email sending, webhooks, or secret-key operations. Those require a separate trusted runtime or a Supabase Edge Function.
+- New dynamic destination/package detail paths require a rebuild because GitHub Pages serves only files generated during export. List pages update directly from Supabase without a rebuild.
 
 The admin dashboard is available at `/admin`; unauthenticated visitors are redirected to `/admin/login`.
 
