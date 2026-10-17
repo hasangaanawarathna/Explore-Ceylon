@@ -1,5 +1,5 @@
 import { requireAdmin } from "@/lib/server/auth";
-import { createBooking, readDatabase, updateDatabase } from "@/lib/server/database";
+import { createBooking, insertBooking, readDatabase } from "@/lib/server/database";
 import { cleanString, enforceRateLimit, isEmail, isValidTravelDate, jsonError, readJsonObject } from "@/lib/server/http";
 
 export async function GET() {
@@ -37,6 +37,6 @@ export async function POST(request: Request) {
     return jsonError("Complete all required booking fields with a valid email, current or future travel date, and 1–100 guests.");
   }
   const booking = createBooking({ name, email, phone, destination, startPoint, finishPoint, travelDate, guests, notes });
-  await updateDatabase((database) => database.bookings.unshift(booking));
+  await insertBooking(booking);
   return Response.json({ booking, message: `Booking request ${booking.id} has been received.` }, { status: 201 });
 }
