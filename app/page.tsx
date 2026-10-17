@@ -1,23 +1,22 @@
 import Image from "next/image";
 
 import { Button } from "@/components/Button";
-import { DestinationCard } from "@/components/DestinationCard";
-import { Hero } from "@/components/Hero";
-import { PackageCard } from "@/components/PackageCard";
+import { DynamicDestinations, DynamicPackages } from "@/components/DynamicCatalogGrid";
+import { DynamicHero } from "@/components/DynamicHero";
 import { SearchBar } from "@/components/SearchBar";
 import { SectionTitle } from "@/components/SectionTitle";
 import {
   blogPosts,
+  destinations,
+  packages,
   testimonials,
   whyChooseUs,
 } from "@/lib/constants";
 import { getUsdToLkrRate, withBasePath } from "@/lib/utils";
-import { readDatabase } from "@/lib/server/database";
+import { defaultHomeHero } from "@/lib/defaults";
 
 export default async function Home() {
-  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
-  const hero = database.settings.homeHero;
-  const { destinations, packages } = database;
+  const usdToLkrRate = await getUsdToLkrRate();
 
   const visualMoments = [
     {
@@ -44,16 +43,7 @@ export default async function Home() {
 
   return (
     <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
-      <Hero
-        eyebrow="Premium travel experiences in Sri Lanka"
-        title={hero.title}
-        description={hero.description}
-        images={hero.images}
-        autoRotate={hero.autoRotate}
-        rotationIntervalSeconds={hero.rotationIntervalSeconds}
-        primaryCta={{ label: "Search tours", href: "/destinations" }}
-        secondaryCta={{ label: "Explore packages", href: "/packages" }}
-      />
+      <DynamicHero initial={defaultHomeHero} />
 
       <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SearchBar />
@@ -100,15 +90,7 @@ export default async function Home() {
           title="Six places that define the island"
           description="From misty highlands to sunlit beaches, these destinations cover the essential Sri Lankan travel experience."
         />
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {destinations.slice(0, 6).map((destination) => (
-            <DestinationCard
-              key={destination.slug}
-              destination={destination}
-              usdToLkrRate={usdToLkrRate}
-            />
-          ))}
-        </div>
+        <DynamicDestinations initial={destinations} usdToLkrRate={usdToLkrRate} limit={6} />
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -117,15 +99,7 @@ export default async function Home() {
           title="Premium journeys for every travel style"
           description="Each package is designed to balance iconic landmarks, authentic experiences, and smooth logistics."
         />
-        <div className="grid gap-6 lg:grid-cols-3">
-          {packages.slice(0, 3).map((travelPackage) => (
-            <PackageCard
-              key={travelPackage.slug}
-              travelPackage={travelPackage}
-              usdToLkrRate={usdToLkrRate}
-            />
-          ))}
-        </div>
+        <DynamicPackages initial={packages} usdToLkrRate={usdToLkrRate} limit={3} />
       </section>
 
       <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[1fr_1.2fr] lg:gap-8 lg:px-8">
