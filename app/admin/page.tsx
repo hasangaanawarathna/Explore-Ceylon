@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
 import { AdminContentEditor } from "@/components/AdminContentEditor";
+import { AdminCatalogManager } from "@/components/AdminCatalogManager";
 import { LiveOperations } from "@/components/LiveOperations";
 import { getAdminSession } from "@/lib/server/auth";
 import { readDatabase } from "@/lib/server/database";
@@ -258,6 +259,12 @@ export default async function AdminPage() {
 
         <main className="min-w-0 flex-1 space-y-6">
           <LiveOperations />
+          <section id="catalog" className="border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <SectionKicker>Supabase catalog</SectionKicker>
+            <h2 className="mt-2 text-2xl font-semibold text-slate-950">Destinations and packages</h2>
+            <p className="mt-2 text-sm text-slate-600">Create, review, update, or delete the records shown on the public website.</p>
+            <AdminCatalogManager destinations={database.destinations} packages={database.packages} />
+          </section>
           <div className="flex flex-col gap-3 border-b border-slate-200/80 pb-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
