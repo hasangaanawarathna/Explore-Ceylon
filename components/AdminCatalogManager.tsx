@@ -29,6 +29,13 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
     try { return JSON.parse(draft) as Destination | TravelPackage; } catch { return null; }
   }
 
+  function updateField(field: string, value: string | number | string[]) {
+    const item = parsedDraft();
+    if (!item) return setMessage("Fix the advanced JSON before using the form fields.");
+    setDraft(JSON.stringify({ ...item, [field]: value }, null, 2));
+    setMessage("");
+  }
+
   function choose(nextKind: Kind, slug = "") {
     setKind(nextKind); setSelected(slug); setMessage(""); setImageFile(null);
     const item = items[nextKind].find((candidate) => candidate.slug === slug) ?? (nextKind === "destinations" ? blankDestination : blankPackage);
@@ -129,7 +136,7 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
         <div className="mt-3 space-y-2">{items[kind].map((item) => <button key={item.slug} onClick={() => choose(kind, item.slug)} className={`w-full border px-3 py-2 text-left text-sm ${selected === item.slug ? "border-sky-500 bg-white" : "border-slate-200 bg-white/60"}`}>{"name" in item ? item.name : item.title}<span className="block text-xs text-slate-500">{item.slug}</span></button>)}</div>
       </div>
       <div>
-        <p className="text-sm text-slate-600">Edit the structured record. Arrays such as activities and features must remain JSON arrays.</p>
+        <p className="text-sm text-slate-600">Use the labelled fields below. Advanced JSON remains available for uncommon data changes.</p>
         <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
           <div className="grid gap-4 sm:grid-cols-[12rem_1fr] sm:items-start">
             <div className="aspect-[4/3] overflow-hidden rounded-lg bg-slate-200">
@@ -152,8 +159,26 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
             </div>
           </div>
         </div>
-        <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows={18} spellCheck={false} className="mt-3 w-full rounded-lg border border-slate-300 bg-slate-950 p-4 font-mono text-xs text-slate-100 outline-none focus:border-sky-500" />
-        <div className="mt-3 flex flex-wrap items-center gap-3"><button onClick={save} className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white">Save record</button>{selected && <button onClick={remove} className="rounded-lg border border-rose-300 px-4 py-2 text-sm font-semibold text-rose-700">Delete</button>}<span className="text-sm text-slate-600">{message}</span></div>
+        {parsedDraft() && (
+          <div className="mt-4 grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-2">
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700">Slug <span className="text-xs font-normal text-slate-500">Lowercase words separated by hyphens.</span><input value={parsedDraft()!.slug} onChange={(event) => updateField("slug", event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700">{kind === "destinations" ? "Name" : "Title"}<input value={kind === "destinations" ? (parsedDraft() as Destination).name : (parsedDraft() as TravelPackage).title} onChange={(event) => updateField(kind === "destinations" ? "name" : "title", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
+            {kind === "destinations" && <label className="grid gap-1.5 text-sm font-medium text-slate-700">Location<input value={(parsedDraft() as Destination).location} onChange={(event) => updateField("location", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>}
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700">{kind === "destinations" ? "Region" : "Category"}<input value={kind === "destinations" ? (parsedDraft() as Destination).region : (parsedDraft() as TravelPackage).category} onChange={(event) => updateField(kind === "destinations" ? "region" : "category", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700">Duration<input value={parsedDraft()!.duration} onChange={(event) => updateField("duration", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700">Price (USD)<input type="number" min="0" step="1" value={parsedDraft()!.priceUsd} onChange={(event) => updateField("priceUsd", Number(event.target.value))} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
+            {kind === "destinations" && <label className="grid gap-1.5 text-sm font-medium text-slate-700">Best time<input value={(parsedDraft() as Destination).bestTime} onChange={(event) => updateField("bestTime", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>}
+            {kind === "destinations" && <label className="grid gap-1.5 text-sm font-medium text-slate-700">Google Maps URL<input type="url" value={(parsedDraft() as Destination).googleMapsUrl} onChange={(event) => updateField("googleMapsUrl", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>}
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700 sm:col-span-2">{kind === "destinations" ? "Activities" : "Features"}<span className="text-xs font-normal text-slate-500">Separate items with commas.</span><input value={(kind === "destinations" ? (parsedDraft() as Destination).activities : (parsedDraft() as TravelPackage).features).join(", ")} onChange={(event) => updateField(kind === "destinations" ? "activities" : "features", event.target.value.split(",").map((value) => value.trim()).filter(Boolean))} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
+            <label className="grid gap-1.5 text-sm font-medium text-slate-700 sm:col-span-2">Summary<textarea rows={4} value={parsedDraft()!.summary} onChange={(event) => updateField("summary", event.target.value)} className="rounded-lg border border-slate-300 px-3 py-2 text-base sm:text-sm" /></label>
+          </div>
+        )}
+        <details className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <summary className="cursor-pointer text-sm font-semibold text-slate-700">Advanced JSON editor</summary>
+          <p className="mt-2 text-xs leading-5 text-slate-500">For advanced use. Invalid JSON disables the labelled form until corrected.</p>
+          <textarea aria-label="Advanced catalog JSON" value={draft} onChange={(event) => setDraft(event.target.value)} rows={18} spellCheck={false} className="mt-3 w-full rounded-lg border border-slate-300 bg-slate-950 p-4 font-mono text-xs text-slate-100 outline-none focus:border-sky-500" />
+        </details>
+        <div className="mt-3 flex flex-wrap items-center gap-3"><button type="button" onClick={save} disabled={uploading || !parsedDraft()} className="min-h-11 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">Save record</button>{selected && <button type="button" onClick={remove} disabled={uploading} className="min-h-11 rounded-lg border border-rose-300 px-4 py-2 text-sm font-semibold text-rose-700 disabled:opacity-50">Delete</button>}<span role="status" aria-live="polite" className="text-sm text-slate-600">{message}</span></div>
       </div>
     </div>
   );

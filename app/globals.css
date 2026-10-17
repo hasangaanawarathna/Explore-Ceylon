@@ -14,13 +14,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   min-height: 100vh;
   background:
@@ -37,6 +30,23 @@ body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 ::selection {

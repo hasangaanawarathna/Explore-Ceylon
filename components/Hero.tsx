@@ -44,7 +44,7 @@ export function Hero({
   const currentImage = images[activeImage] ?? images[0];
 
   useEffect(() => {
-    if (!autoRotate || images.length < 2) return;
+    if (!autoRotate || images.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(
       () => setActiveImage((current) => (current + 1) % images.length),
       rotationIntervalSeconds * 1000,
