@@ -1,10 +1,11 @@
 import { PackageCard } from "@/components/PackageCard";
 import { SectionTitle } from "@/components/SectionTitle";
-import { packages } from "@/lib/constants";
+import { readDatabase } from "@/lib/server/database";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 export default async function PackagesPage() {
-  const usdToLkrRate = await getUsdToLkrRate();
+  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
+  const { packages } = database;
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-12 sm:space-y-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">

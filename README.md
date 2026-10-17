@@ -27,13 +27,13 @@ Frontend
 Backend
 
 - Next.js Route Handlers on Node.js
-- Signed, HTTP-only admin sessions
-- Persistent JSON repository (replaceable with PostgreSQL)
+- Supabase Auth with server-validated administrator sessions
+- Supabase PostgreSQL with Row Level Security
 
 Database
 
-- Local persistent JSON for the current deployment
-- PostgreSQL is recommended before multi-instance production scaling
+- Supabase PostgreSQL in configured environments
+- Local JSON remains only as a development fallback when Supabase variables are absent
 
 Deployment
 
@@ -57,7 +57,24 @@ npm install
 
 ## Configure
 
-Copy `.env.example` to `.env.local` and replace the admin password and authentication secret. Never deploy with the development credentials.
+Set these values locally and in the hosting provider's encrypted environment settings:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://ttdlyhasckupbzngcrez.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-project-publishable-key
+```
+
+The publishable key is designed for browser use; never add a Supabase secret/service-role key to this application. Database writes remain protected by RLS and server-side administrator checks.
+
+## Supabase setup and safe migration
+
+1. In the Supabase SQL Editor, run `supabase/migrations/001_initial_schema.sql` and then `002_seed_existing_content.sql`.
+2. In Authentication > Users, create the administrator account. Do not put its password in SQL or an environment variable.
+3. Edit the placeholder email in `supabase/ADMIN_SETUP.sql`, run it once, and verify a row exists in `admin_profiles`.
+4. Add the two environment variables above to `.env.local` and the deployment provider, then restart/redeploy.
+5. Verify public catalog reads and form submissions, then verify `/admin` sign-in and CRUD/status operations.
+
+The seed migration uses `ON CONFLICT DO NOTHING`: it never updates or deletes an existing destination, package, or settings row. The existing ignored `data/explore-ceylon.json` file remains untouched as a rollback/reference copy. If it later contains live enquiries or bookings, export and review them before importing; do not rerun them as blind inserts.
 
 ## Run
 
@@ -72,7 +89,7 @@ npm run build
 npm start
 ```
 
-The data directory must be writable and persistent. Set `DATA_DIRECTORY` to the mounted storage path on the production host.
+No persistent filesystem is required after Supabase is configured. The deployment runtime must support Next.js Route Handlers and cookies (for example, Vercel or a Node.js host); static export hosting is not supported.
 
 ## Backend API
 
@@ -92,7 +109,6 @@ The admin dashboard is available at `/admin`; unauthenticated visitors are redir
 ## Future Production Integrations
 
 - Payment Gateway
-- PostgreSQL or another managed database
 - Weather API
 - Google Maps
 - Reviews
