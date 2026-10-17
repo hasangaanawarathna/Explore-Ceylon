@@ -1,13 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 
-import { formatDualCurrency, getUsdToLkrRate } from "@/lib/utils";
+import { formatDualCurrency } from "@/lib/utils";
 import { AdminContentEditor } from "@/components/AdminContentEditor";
 import { AdminCatalogManager } from "@/components/AdminCatalogManager";
+import { AdminGuard } from "@/components/AdminGuard";
 import { LiveOperations } from "@/components/LiveOperations";
-import { getAdminSession } from "@/lib/server/auth";
-import { readDatabase } from "@/lib/server/database";
+import { destinations, packages } from "@/lib/constants";
+import { defaultHomeHero } from "@/lib/defaults";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -209,12 +209,12 @@ function SectionKicker({
   );
 }
 
-export default async function AdminPage() {
-  if (!(await getAdminSession())) redirect("/admin/login");
-  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
+export default function AdminPage() {
+  const usdToLkrRate = 336;
+  const database = { destinations, packages, settings: { homeHero: defaultHomeHero } };
 
   return (
-    <div className="min-h-screen bg-[#edf3f5]">
+    <AdminGuard><div className="min-h-screen bg-[#edf3f5]">
       <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
         <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] lg:w-64">
           <div className="rounded-2xl bg-[#102a2e] p-4 text-white shadow-xl shadow-slate-300/40 lg:min-h-full lg:rounded-none">
@@ -775,6 +775,6 @@ export default async function AdminPage() {
           </section>
         </main>
       </div>
-    </div>
+    </div></AdminGuard>
   );
 }
