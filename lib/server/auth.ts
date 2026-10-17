@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { createClient as createSupabaseClient } from "@/lib/supabase/server";
 
 const cookieName = "explore_ceylon_admin";
 const maxAge = 60 * 60 * 8;
@@ -74,6 +76,18 @@ export function verifySessionToken(token?: string) {
 }
 
 export async function getAdminSession() {
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) return null;
+    const { data: profile } = await supabase
+      .from("admin_profiles")
+      .select("user_id, role, is_active")
+      .eq("user_id", user.id)
+      .eq("is_active", true)
+      .maybeSingle();
+    return profile ? { email: user.email ?? "", expiresAt: 0, userId: user.id, role: profile.role } : null;
+  }
   return verifySessionToken((await cookies()).get(cookieName)?.value);
 }
 

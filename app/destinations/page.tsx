@@ -1,11 +1,12 @@
 import { DestinationCard } from "@/components/DestinationCard";
 import { SearchBar } from "@/components/SearchBar";
 import { SectionTitle } from "@/components/SectionTitle";
-import { destinations } from "@/lib/constants";
+import { readDatabase } from "@/lib/server/database";
 import { getUsdToLkrRate } from "@/lib/utils";
 
 export default async function DestinationsPage() {
-  const usdToLkrRate = await getUsdToLkrRate();
+  const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
+  const { destinations } = database;
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-12 sm:space-y-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
