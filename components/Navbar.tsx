@@ -29,7 +29,14 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Explore Ceylon home">
-          <ResilientImage src="/icons/explore-mark.svg" alt="" width={34} height={34} priority />
+          <ResilientImage
+            src="/images/explore-ceylon-logo-nav.png"
+            alt=""
+            width={96}
+            height={96}
+            priority
+            className="h-9 w-9 shrink-0 object-contain sm:h-11 sm:w-11"
+          />
           <div className="min-w-0">
             <p className="truncate text-base font-semibold leading-none text-slate-950 sm:text-lg">Explore Ceylon</p>
             <p className="mt-1 hidden text-xs uppercase tracking-[0.24em] text-slate-500 sm:block">Discover Sri Lanka</p>
