@@ -8,8 +8,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SectionTitle } from "@/components/SectionTitle";
 import {
   blogPosts,
-  destinations,
-  packages,
   testimonials,
   whyChooseUs,
 } from "@/lib/constants";
@@ -19,6 +17,7 @@ import { readDatabase } from "@/lib/server/database";
 export default async function Home() {
   const [usdToLkrRate, database] = await Promise.all([getUsdToLkrRate(), readDatabase()]);
   const hero = database.settings.homeHero;
+  const { destinations, packages } = database;
 
   const visualMoments = [
     {
