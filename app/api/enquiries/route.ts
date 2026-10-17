@@ -1,4 +1,4 @@
-import { createEnquiry, readDatabase, updateDatabase } from "@/lib/server/database";
+import { createEnquiry, insertEnquiry, readDatabase } from "@/lib/server/database";
 import { requireAdmin } from "@/lib/server/auth";
 import { cleanString, enforceRateLimit, isEmail, jsonError, readJsonObject } from "@/lib/server/http";
 
@@ -22,6 +22,6 @@ export async function POST(request: Request) {
     return jsonError("Name, a valid email, subject, and a message of at least 10 characters are required.");
   }
   const enquiry = createEnquiry({ name, email, phone, subject, message });
-  await updateDatabase((database) => database.enquiries.unshift(enquiry));
+  await insertEnquiry(enquiry);
   return Response.json({ enquiry, message: "Your enquiry has been received." }, { status: 201 });
 }
