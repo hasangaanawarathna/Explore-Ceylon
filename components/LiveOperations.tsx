@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import type { Booking, BookingStatus, Enquiry, EnquiryStatus } from "@/lib/server/models";
 import { createClient } from "@/lib/supabase/client";
 import { bookingFromRow, enquiryFromRow } from "@/lib/supabase/repository";
@@ -9,7 +8,6 @@ import { bookingFromRow, enquiryFromRow } from "@/lib/supabase/repository";
 type Dashboard = { counts: Record<string, number>; recentBookings: Booking[]; recentEnquiries: Enquiry[] };
 
 export function LiveOperations() {
-  const router = useRouter();
   const [data, setData] = useState<Dashboard | null>(null);
   const [error, setError] = useState("");
 
@@ -42,17 +40,10 @@ export function LiveOperations() {
     await load();
   }
 
-  async function logout() {
-    await createClient().auth.signOut();
-    router.replace("/admin/login");
-    router.refresh();
-  }
-
   return (
     <section className="min-w-0 border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Live backend</p><h2 className="mt-2 text-2xl font-semibold">Customer operations</h2></div>
-        <button type="button" onClick={logout} className="min-h-11 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold">Sign out</button>
       </div>
       {error && <p className="mt-4 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
       {!data ? <p className="mt-5 text-sm text-slate-500">Loading current records...</p> : (

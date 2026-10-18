@@ -2,11 +2,24 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 const navItems = ["Overview", "Bookings", "Packages", "Leads", "Content", "Payments", "Reports", "Settings"];
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
 
 export function AdminNavigation() {
   const [open, setOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function logout() {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      await createClient().auth.signOut();
+    } finally {
+      window.location.replace(`${basePath}/admin/login/`);
+    }
+  }
 
   return (
     <aside className="min-w-0 lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] lg:w-64 lg:shrink-0">
@@ -19,9 +32,14 @@ export function AdminNavigation() {
               <span className="h-2 w-2 rounded-full bg-emerald-400" />Workspace live
             </div>
           </div>
-          <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-4 text-sm font-semibold text-white lg:hidden" aria-expanded={open} aria-controls="admin-navigation" onClick={() => setOpen((current) => !current)}>
-            {open ? "Close menu" : "Menu"}
-          </button>
+          <div className="flex shrink-0 gap-2 lg:hidden">
+            <button type="button" onClick={logout} disabled={signingOut} className="inline-flex min-h-11 items-center justify-center rounded-lg border border-rose-300/40 px-3 text-sm font-semibold text-rose-100 disabled:opacity-60">
+              {signingOut ? "Signing out..." : "Log out"}
+            </button>
+            <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-3 text-sm font-semibold text-white" aria-expanded={open} aria-controls="admin-navigation" onClick={() => setOpen((current) => !current)}>
+              {open ? "Close" : "Menu"}
+            </button>
+          </div>
         </div>
 
         <div id="admin-navigation" className={`${open ? "block" : "hidden"} lg:block`}>
@@ -34,6 +52,9 @@ export function AdminNavigation() {
           </nav>
           <div className="mt-5 border-t border-white/10 pt-4 lg:mt-6">
             <Link href="/" className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#102a2e] transition hover:bg-teal-50">View Website</Link>
+            <button type="button" onClick={logout} disabled={signingOut} className="mt-2 hidden min-h-11 w-full items-center justify-center rounded-lg border border-rose-300/40 px-4 py-2 text-sm font-semibold text-rose-100 transition hover:bg-rose-400/10 disabled:opacity-60 lg:inline-flex">
+              {signingOut ? "Signing out..." : "Log out"}
+            </button>
             <p className="mt-4 hidden text-xs uppercase tracking-[0.18em] text-teal-100/50 lg:block">Today</p>
             <p className="mt-2 hidden text-sm font-semibold text-white lg:block">12 live requests</p>
             <p className="mt-1 hidden text-sm text-teal-100/60 lg:block">4 require approval before noon.</p>
