@@ -96,7 +96,7 @@ Run it with `npm start`. Admin authentication requires a server-capable Next.js 
 
 ## Admin development/testing authentication
 
-The shared-password login is development/testing only. Copy the admin variables from `.env.example` into `.env.local`. To keep the existing RLS-protected editing features available, set `ADMIN_SUPABASE_EMAIL` to an existing Supabase Auth user with an active `admin_profiles` row and set that account's password to the same value as `ADMIN_PASSWORD`. If that optional bridge is unavailable, login still succeeds but Supabase-protected edits are not available.
+The shared-password login is development/testing only. Copy the admin variables from `.env.example` into `.env.local`. To keep the existing RLS-protected editing features available, set `ADMIN_SUPABASE_EMAIL` to an existing Supabase Auth user with an active `admin_profiles` row. If its Supabase password differs from `ADMIN_PASSWORD`, provide it separately as the server-only `ADMIN_SUPABASE_PASSWORD`; it is never sent by the login form or exposed to browser code.
 
 The admin dashboard is available at `/admin`; unauthenticated visitors are redirected to `/admin/login`.
 

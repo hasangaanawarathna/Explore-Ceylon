@@ -21,12 +21,14 @@ export async function POST(request: Request) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
     const supabaseAdminEmail = process.env.ADMIN_SUPABASE_EMAIL;
-    if (supabaseUrl && supabaseKey && supabaseAdminEmail) {
+    const supabaseAdminPassword = process.env.ADMIN_SUPABASE_PASSWORD || password;
+    if (supabaseUrl && supabaseKey) {
+      if (!supabaseAdminEmail) throw new Error("ADMIN_SUPABASE_EMAIL is not configured.");
       const { data: supabaseAuth, error: supabaseError } = await createSupabaseClient(supabaseUrl, supabaseKey, {
         auth: { persistSession: false, autoRefreshToken: false },
-      }).auth.signInWithPassword({ email: supabaseAdminEmail, password });
+      }).auth.signInWithPassword({ email: supabaseAdminEmail, password: supabaseAdminPassword });
       if (supabaseError || !supabaseAuth.session) {
-        console.error("Dashboard Supabase session could not be created:", supabaseError?.message ?? "No session returned");
+        throw new Error(`Dashboard Supabase session could not be created: ${supabaseError?.message ?? "No session returned"}`);
       } else {
         accessToken = supabaseAuth.session.access_token;
         refreshToken = supabaseAuth.session.refresh_token;
@@ -50,6 +52,6 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error("Admin login configuration error:", error instanceof Error ? error.message : "Unknown error");
-    return NextResponse.json({ error: "Admin login is not configured." }, { status: 500 });
+    return NextResponse.json({ error: "Admin data access is not configured." }, { status: 503 });
   }
 }
