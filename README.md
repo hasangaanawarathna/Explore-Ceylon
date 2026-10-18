@@ -96,7 +96,7 @@ Run it with `npm start`.
 
 ## Admin authentication
 
-Sign in with the email address and password of the existing Supabase Auth administrator. The account must have an active `admin_profiles` row. Supabase persists and refreshes the browser session; no administrator credentials belong in environment variables.
+Sign in with the email address and password of the existing Supabase Auth administrator. The account must have an active `admin_profiles` row. Supabase keeps and refreshes authentication in session-scoped browser storage, so refreshes and navigation stay signed in without creating a durable remembered login. No administrator credentials belong in environment variables.
 
 The admin dashboard is available at `/admin`; unauthenticated visitors are redirected to `/admin/login`.
 

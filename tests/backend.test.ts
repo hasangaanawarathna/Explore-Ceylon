@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { destinationFromRow, packageFromRow } from "../lib/supabase/repository";
 import { MAX_IMAGE_BYTES, storagePathFromPublicUrl, validateImageFile } from "../lib/supabase/storage";
-import { ADMIN_SESSION_MAX_AGE_MS, isAdminSessionWithinLimit } from "../lib/supabase/admin-session";
+import { createSessionOnlyStorage, supabaseAuthStorageKey } from "../lib/supabase/session-storage";
 
 test("Supabase destination rows map to application models", () => {
   const item = destinationFromRow({ slug: "ella", name: "Ella", location: "Uva", region: "Hills", summary: "Tea country", image: "/ella.jpg", price_usd: 145, duration: "3 days", best_time: "December", activities: ["Hiking"], google_maps_url: "https://maps.example" });
@@ -29,9 +29,17 @@ test("managed public image URLs resolve to safe Storage object paths", () => {
   assert.equal(storagePathFromPublicUrl("/images/local.jpg"), null);
 });
 
-test("admin sessions are capped at 30 days", () => {
-  const now = Date.UTC(2026, 9, 18);
-  assert.equal(isAdminSessionWithinLimit(String(now - ADMIN_SESSION_MAX_AGE_MS), now), true);
-  assert.equal(isAdminSessionWithinLimit(String(now - ADMIN_SESSION_MAX_AGE_MS - 1), now), false);
-  assert.equal(isAdminSessionWithinLimit("invalid", now), false);
+test("admin authentication uses session-scoped storage", () => {
+  const values = new Map<string, string>();
+  const browserSession = {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => { values.set(key, value); },
+    removeItem: (key: string) => { values.delete(key); },
+  };
+  const storage = createSessionOnlyStorage(browserSession);
+  storage.setItem("auth", "session");
+  assert.equal(storage.getItem("auth"), "session");
+  storage.removeItem("auth");
+  assert.equal(storage.getItem("auth"), null);
+  assert.equal(supabaseAuthStorageKey("https://project-ref.supabase.co"), "sb-project-ref-auth-token");
 });

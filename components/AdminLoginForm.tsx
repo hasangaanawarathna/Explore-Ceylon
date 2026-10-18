@@ -3,7 +3,6 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { clearAdminSessionStarted, markAdminSessionStarted } from "@/lib/supabase/admin-session";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -34,12 +33,10 @@ export function AdminLoginForm() {
         .maybeSingle();
       if (profileError || !profile) {
         await supabase.auth.signOut();
-        clearAdminSessionStarted();
         setError("This account does not have active administrator access.");
         return;
       }
 
-      markAdminSessionStarted();
       router.replace("/admin");
       router.refresh();
     } catch {

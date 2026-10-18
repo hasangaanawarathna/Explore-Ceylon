@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import type { Booking, BookingStatus, Enquiry, EnquiryStatus } from "@/lib/server/models";
 import { createClient } from "@/lib/supabase/client";
 import { bookingFromRow, enquiryFromRow } from "@/lib/supabase/repository";
-import { clearAdminSessionStarted } from "@/lib/supabase/admin-session";
 
 type Dashboard = { counts: Record<string, number>; recentBookings: Booking[]; recentEnquiries: Enquiry[] };
 
@@ -45,7 +44,6 @@ export function LiveOperations() {
 
   async function logout() {
     await createClient().auth.signOut();
-    clearAdminSessionStarted();
     router.replace("/admin/login");
     router.refresh();
   }

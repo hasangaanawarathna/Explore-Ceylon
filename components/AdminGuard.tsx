@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { assertAdmin } from "@/lib/supabase/repository";
-import { clearAdminSessionStarted, ensureAdminSessionStarted, isStoredAdminSessionWithinLimit } from "@/lib/supabase/admin-session";
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -13,26 +12,15 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     let active = true;
     const supabase = createClient();
     const verify = async () => {
-      if (!isStoredAdminSessionWithinLimit()) {
-        clearAdminSessionStarted();
-        await supabase.auth.signOut();
-        if (active) router.replace("/admin/login");
-        return;
-      }
       const admin = await assertAdmin();
       if (!active) return;
-      if (admin) {
-        // Adopt valid sessions created before the 30-day marker was introduced.
-        ensureAdminSessionStarted();
-        setAllowed(true);
-      }
+      if (admin) setAllowed(true);
       else router.replace("/admin/login");
     };
 
     void verify().catch(() => router.replace("/admin/login"));
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
-        clearAdminSessionStarted();
         setAllowed(false);
         router.replace("/admin/login");
       }
