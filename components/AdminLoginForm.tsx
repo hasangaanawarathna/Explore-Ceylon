@@ -21,10 +21,7 @@ export function AdminLoginForm() {
       const response = await fetch(`${basePath}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: String(form.get("email")),
-          password: String(form.get("password")),
-        }),
+        body: JSON.stringify({ password: String(form.get("password")) }),
       });
       const result = (await response.json()) as { error?: string; accessToken?: string; refreshToken?: string };
       if (!response.ok) return setError(result.error ?? "Unable to sign in.");
@@ -49,9 +46,6 @@ export function AdminLoginForm() {
 
   return (
     <form onSubmit={submit} className="mt-8 grid gap-5">
-      <label className="grid gap-2 text-sm font-semibold text-slate-700">Email
-        <input name="email" type="email" required autoComplete="username" className="h-12 rounded-xl border border-slate-300 px-4 font-normal outline-none focus:border-sky-500" />
-      </label>
       <label className="grid gap-2 text-sm font-semibold text-slate-700">Password
         <input name="password" type="password" required autoComplete="current-password" className="h-12 rounded-xl border border-slate-300 px-4 font-normal outline-none focus:border-sky-500" />
       </label>

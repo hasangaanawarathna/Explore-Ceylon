@@ -1,23 +1,20 @@
 import { NextResponse } from "next/server";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
-import { ADMIN_SESSION_COOKIE, createAdminSession, isValidEmail, passwordMatches } from "@/lib/server/admin-auth";
-import { sendAdminLoginNotification } from "@/lib/server/admin-login-email";
+import { ADMIN_SESSION_COOKIE, createAdminSession, passwordMatches } from "@/lib/server/admin-auth";
 
 export async function POST(request: Request) {
-  let credentials: { email?: unknown; password?: unknown };
+  let credentials: { password?: unknown };
   try {
     credentials = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid login request." }, { status: 400 });
   }
 
-  const email = typeof credentials.email === "string" ? credentials.email.trim().toLowerCase() : "";
   const password = typeof credentials.password === "string" ? credentials.password : "";
-  if (!isValidEmail(email)) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
 
   try {
-    if (!passwordMatches(password)) return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
+    if (!passwordMatches(password)) return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
 
     let accessToken: string | undefined;
     let refreshToken: string | undefined;
@@ -36,7 +33,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const session = await createAdminSession(email);
+    const session = await createAdminSession();
     const response = NextResponse.json({
       success: true,
       accessToken,
@@ -49,12 +46,6 @@ export async function POST(request: Request) {
       path: "/",
       maxAge: session.maxAge,
     });
-
-    try {
-      await sendAdminLoginNotification(email);
-    } catch (error) {
-      console.error("Admin login notification delivery failed:", error instanceof Error ? error.message : "Unknown error");
-    }
     return response;
   } catch (error) {
     console.error("Admin login configuration error:", error instanceof Error ? error.message : "Unknown error");

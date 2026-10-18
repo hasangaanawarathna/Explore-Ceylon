@@ -4,7 +4,7 @@ import { timingSafeEqual } from "node:crypto";
 export const ADMIN_SESSION_COOKIE = "explore_ceylon_admin";
 const SESSION_DURATION_SECONDS = 60 * 60 * 8;
 
-type SessionPayload = { email: string; expiresAt: number };
+type SessionPayload = { expiresAt: number };
 
 function toBase64Url(value: string | ArrayBuffer) {
   const bytes = typeof value === "string" ? new TextEncoder().encode(value) : new Uint8Array(value);
@@ -28,9 +28,8 @@ async function sign(value: string) {
   return toBase64Url(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(value)));
 }
 
-export async function createAdminSession(email: string) {
+export async function createAdminSession() {
   const payload = toBase64Url(JSON.stringify({
-    email,
     expiresAt: Date.now() + SESSION_DURATION_SECONDS * 1000,
   } satisfies SessionPayload));
   return { value: `${payload}.${await sign(payload)}`, maxAge: SESSION_DURATION_SECONDS };
@@ -48,14 +47,10 @@ export async function verifyAdminSession(token?: string): Promise<SessionPayload
 
   try {
     const session = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as SessionPayload;
-    return typeof session.email === "string" && session.expiresAt > Date.now() ? session : null;
+    return typeof session.expiresAt === "number" && session.expiresAt > Date.now() ? session : null;
   } catch {
     return null;
   }
-}
-
-export function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 254;
 }
 
 export function passwordMatches(candidate: string) {

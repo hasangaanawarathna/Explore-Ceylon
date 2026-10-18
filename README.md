@@ -92,13 +92,11 @@ Create the production server build:
 npm run build
 ```
 
-Run it with `npm start`. Admin authentication and login notifications now require a server-capable Next.js host; GitHub Pages cannot execute the API routes.
+Run it with `npm start`. Admin authentication requires a server-capable Next.js host; GitHub Pages cannot execute the API routes.
 
 ## Admin development/testing authentication
 
 The shared-password login is development/testing only. Copy the admin variables from `.env.example` into `.env.local`. To keep the existing RLS-protected editing features available, set `ADMIN_SUPABASE_EMAIL` to an existing Supabase Auth user with an active `admin_profiles` row and set that account's password to the same value as `ADMIN_PASSWORD`. If that optional bridge is unavailable, login still succeeds but Supabase-protected edits are not available.
-
-Create a Resend API key, verify the sender domain, and configure `RESEND_API_KEY` and `ADMIN_LOGIN_FROM_EMAIL`. These values are server-only and must never use the `NEXT_PUBLIC_` prefix. Successful logins notify `ADMIN_LOGIN_NOTIFY_EMAIL`, which defaults to `hasanngaanawarathna@gmail.com`. Email delivery failures are logged server-side and do not cancel login.
 
 The admin dashboard is available at `/admin`; unauthenticated visitors are redirected to `/admin/login`.
 
