@@ -28,7 +28,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-8">
+    <form onSubmit={submit} className="min-w-0 max-w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/50 min-[360px]:p-5 sm:rounded-[2rem] sm:p-8">
       <div className="grid gap-5 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-medium text-slate-700">Full name<input name="name" autoComplete="name" required maxLength={120} className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" /></label>
         <label className="grid gap-2 text-sm font-medium text-slate-700">Email address<input name="email" required type="email" inputMode="email" autoComplete="email" maxLength={200} className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm" /></label>

@@ -127,24 +127,24 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
   }
 
   return (
-    <div className="mt-5 grid gap-4 lg:grid-cols-[0.35fr_0.65fr]">
-      <div className="border border-slate-200 bg-slate-50 p-4">
-        <div className="flex gap-2">
+    <div className="mt-5 grid min-w-0 gap-4 lg:grid-cols-[0.35fr_0.65fr]">
+      <div className="min-w-0 border border-slate-200 bg-slate-50 p-3 min-[360px]:p-4">
+        <div className="flex min-w-0 flex-wrap gap-2">
           {(["destinations", "packages"] as Kind[]).map((value) => <button key={value} onClick={() => choose(value)} className={`rounded-full px-3 py-2 text-xs font-semibold capitalize ${kind === value ? "bg-slate-950 text-white" : "bg-white text-slate-700"}`}>{value}</button>)}
         </div>
         <button onClick={() => choose(kind)} className="mt-4 w-full rounded-lg border border-sky-300 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800">Create new</button>
         <div className="mt-3 space-y-2">{items[kind].map((item) => <button key={item.slug} onClick={() => choose(kind, item.slug)} className={`w-full border px-3 py-2 text-left text-sm ${selected === item.slug ? "border-sky-500 bg-white" : "border-slate-200 bg-white/60"}`}>{"name" in item ? item.name : item.title}<span className="block text-xs text-slate-500">{item.slug}</span></button>)}</div>
       </div>
-      <div>
+      <div className="min-w-0 max-w-full">
         <p className="text-sm text-slate-600">Use the labelled fields below. Advanced JSON remains available for uncommon data changes.</p>
-        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <div className="grid gap-4 sm:grid-cols-[12rem_1fr] sm:items-start">
+        <div className="mt-4 min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 p-3 min-[360px]:p-4">
+          <div className="grid min-w-0 gap-4 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start">
             <div className="aspect-[4/3] overflow-hidden rounded-lg bg-slate-200">
               {/* A plain img supports local previews and remote Supabase URLs in static exports. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={previewUrl || withBasePath(parsedDraft()?.image || "/images/hero-sri-lanka.svg")} alt="Selected catalog image preview" className="h-full w-full object-cover" />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="font-semibold text-slate-950">Catalog photograph</p>
               <p className="mt-1 text-sm leading-6 text-slate-600">JPG, PNG, or WebP. Maximum file size: 5 MB.</p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -160,7 +160,7 @@ export function AdminCatalogManager({ destinations, packages }: { destinations: 
           </div>
         </div>
         {parsedDraft() && (
-          <div className="mt-4 grid gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-2">
+          <div className="mt-4 grid min-w-0 gap-4 rounded-xl border border-slate-200 bg-white p-3 min-[360px]:p-4 sm:grid-cols-2">
             <label className="grid gap-1.5 text-sm font-medium text-slate-700">Slug <span className="text-xs font-normal text-slate-500">Lowercase words separated by hyphens.</span><input value={parsedDraft()!.slug} onChange={(event) => updateField("slug", event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
             <label className="grid gap-1.5 text-sm font-medium text-slate-700">{kind === "destinations" ? "Name" : "Title"}<input value={kind === "destinations" ? (parsedDraft() as Destination).name : (parsedDraft() as TravelPackage).title} onChange={(event) => updateField(kind === "destinations" ? "name" : "title", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>
             {kind === "destinations" && <label className="grid gap-1.5 text-sm font-medium text-slate-700">Location<input value={(parsedDraft() as Destination).location} onChange={(event) => updateField("location", event.target.value)} className="h-11 rounded-lg border border-slate-300 px-3 text-base sm:text-sm" /></label>}

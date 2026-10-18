@@ -126,15 +126,15 @@ export function RoutePlanner({
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <form className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-6 md:p-8">
+    <div className="grid min-w-0 gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+      <form className="min-w-0 max-w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/50 min-[360px]:p-5 sm:rounded-[2rem] sm:p-6 md:p-8">
         <div className="grid gap-5">
           <label className="grid gap-2 text-sm font-medium text-slate-700">
             Destination you choose
             <select
               value={selectedDestinationSlug}
               onChange={(event) => handleDestinationChange(event.target.value)}
-              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
+              className="h-12 w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base outline-none transition focus:border-sky-400 focus:bg-white min-[360px]:px-4 sm:rounded-2xl sm:text-sm"
             >
               {destinations.map((destination) => (
                 <option key={destination.slug} value={destination.slug}>
@@ -149,7 +149,7 @@ export function RoutePlanner({
             <select
               value={startPoint}
               onChange={(event) => setStartPoint(event.target.value)}
-              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
+              className="h-12 w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base outline-none transition focus:border-sky-400 focus:bg-white min-[360px]:px-4 sm:rounded-2xl sm:text-sm"
             >
               {popularStartPoints.map((point) => (
                 <option key={point}>{point}</option>
@@ -165,7 +165,7 @@ export function RoutePlanner({
                 value={customStartPoint}
                 onChange={(event) => setCustomStartPoint(event.target.value)}
                 placeholder="Example: Hikkaduwa"
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
+                className="h-12 w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base outline-none transition focus:border-sky-400 focus:bg-white min-[360px]:px-4 sm:rounded-2xl sm:text-sm"
               />
             </label>
           ) : null}
@@ -191,7 +191,7 @@ export function RoutePlanner({
               value={finishPoint}
               onChange={(event) => setFinishPoint(event.target.value)}
               placeholder="Example: Ella"
-              className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none transition focus:border-sky-400 focus:bg-white sm:rounded-2xl sm:text-sm"
+              className="h-12 w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base outline-none transition focus:border-sky-400 focus:bg-white min-[360px]:px-4 sm:rounded-2xl sm:text-sm"
             />
           </label>
 
@@ -216,7 +216,7 @@ export function RoutePlanner({
         </a>
       </form>
 
-      <section className="rounded-2xl bg-slate-950 p-5 text-white shadow-2xl shadow-slate-950/20 sm:rounded-[2rem] sm:p-6 md:p-8">
+      <section className="min-w-0 max-w-full rounded-2xl bg-slate-950 p-4 text-white shadow-2xl shadow-slate-950/20 min-[360px]:p-5 sm:rounded-[2rem] sm:p-6 md:p-8">
         <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase text-sky-200">
@@ -247,18 +247,18 @@ export function RoutePlanner({
 
         <div className="mt-6 space-y-4">
           {routeSteps.map((step, index) => (
-            <div key={`${step.label}-${step.value}`} className="grid grid-cols-[2.5rem_1fr] gap-4">
+            <div key={`${step.label}-${step.value}`} className="grid min-w-0 grid-cols-[2.5rem_minmax(0,1fr)] gap-3 min-[360px]:gap-4">
               <div className="flex flex-col items-center">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-bold text-slate-950">
                   {index + 1}
                 </div>
                 {index < routeSteps.length - 1 ? <div className="h-full min-h-8 w-px bg-white/20" /> : null}
               </div>
-              <div className="pb-4">
+              <div className="min-w-0 pb-4">
                 <p className="text-xs font-semibold uppercase text-sky-200">
                   {step.label}
                 </p>
-                <p className="mt-1 text-lg font-semibold text-white">{step.value}</p>
+                <p className="mt-1 break-words text-lg font-semibold text-white">{step.value}</p>
               </div>
             </div>
           ))}

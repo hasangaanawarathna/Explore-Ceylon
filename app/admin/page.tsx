@@ -204,13 +204,13 @@ export default function AdminPage() {
   const database = { destinations, packages, settings: { homeHero: defaultHomeHero } };
 
   return (
-    <AdminGuard><div className="admin-dashboard min-h-screen overflow-x-clip bg-[#edf3f5]">
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-4 px-3 py-4 sm:gap-6 sm:px-6 sm:py-6 lg:flex-row lg:px-8">
+    <AdminGuard><div className="admin-dashboard min-h-screen min-w-0 max-w-full bg-[#edf3f5]">
+      <div className="mx-auto flex min-h-screen w-full min-w-0 max-w-7xl flex-col gap-4 px-2 py-3 min-[360px]:px-3 min-[360px]:py-4 sm:gap-6 sm:px-6 sm:py-6 lg:flex-row lg:px-8">
         <AdminNavigation />
 
-        <main className="min-w-0 flex-1 space-y-6">
+        <main className="w-full min-w-0 max-w-full flex-1 space-y-6">
           <LiveOperations />
-          <section id="catalog" className="border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+          <section id="catalog" className="min-w-0 max-w-full border border-slate-200 bg-white p-3 shadow-sm min-[360px]:p-4 sm:p-6">
             <SectionKicker>Supabase catalog</SectionKicker>
             <h2 className="mt-2 text-2xl font-semibold text-slate-950">Destinations and packages</h2>
             <p className="mt-2 text-sm text-slate-600">Create, review, update, or delete the records shown on the public website.</p>

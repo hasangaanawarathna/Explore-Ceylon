@@ -49,7 +49,7 @@ export function AdminContentEditor({ initialHero }: { initialHero: HeroSettings 
   }
 
   return (
-    <div className="mt-5 border border-slate-200 bg-slate-50 p-4 sm:p-5">
+    <div className="mt-5 min-w-0 max-w-full border border-slate-200 bg-slate-50 p-3 min-[360px]:p-4 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div><p className="text-sm font-semibold text-slate-950">Homepage image rotation</p><p className="mt-1 text-sm text-slate-500">Choose suggested images, set their order, and control how visitors see them.</p></div>
         <label className="flex items-center gap-2 text-sm font-semibold text-slate-700"><input type="checkbox" checked={hero.autoRotate} onChange={(event) => setHero({ ...hero, autoRotate: event.target.checked })} className="h-5 w-5 accent-sky-600" />Auto-rotate</label>
@@ -63,13 +63,13 @@ export function AdminContentEditor({ initialHero }: { initialHero: HeroSettings 
         <p className="text-sm font-semibold text-slate-700">Suggested images</p><p className="mt-1 text-xs text-slate-500">Select up to eight. At least one image must stay active.</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {suggestedImages.map((image) => { const selected = hero.images.includes(image.src); return (
-            <button key={image.src} type="button" onClick={() => toggleImage(image.src)} aria-pressed={selected} className={`overflow-hidden rounded-lg border-2 bg-white text-left transition ${selected ? "border-sky-500 shadow-md" : "border-transparent hover:border-slate-300"}`}>
+            <button key={image.src} type="button" onClick={() => toggleImage(image.src)} aria-pressed={selected} className={`min-w-0 max-w-full overflow-hidden rounded-lg border-2 bg-white text-left transition ${selected ? "border-sky-500 shadow-md" : "border-transparent hover:border-slate-300"}`}>
               <div className="h-24 bg-cover bg-center" style={{ backgroundImage: `url(${withBasePath(image.src)})` }} /><div className="flex items-center justify-between gap-2 p-3"><span className="text-xs font-semibold text-slate-800">{image.label}</span><span className={`text-xs font-bold ${selected ? "text-sky-700" : "text-slate-400"}`}>{selected ? "Selected" : "Add"}</span></div>
             </button>); })}
         </div>
       </div>
       <div className="mt-5"><p className="text-sm font-semibold text-slate-700">Display order</p><div className="mt-2 space-y-2">
-        {hero.images.map((src, index) => <div key={src} className="flex items-center gap-3 border border-slate-200 bg-white p-2"><div className="h-12 w-20 shrink-0 bg-cover bg-center" style={{ backgroundImage: `url(${withBasePath(src)})` }} /><span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-700">{suggestedImages.find((image) => image.src === src)?.label ?? src}</span><button type="button" onClick={() => moveImage(index, -1)} disabled={index === 0} className="px-2 py-1 text-sm font-bold text-slate-600 disabled:opacity-25" aria-label="Move image earlier">↑</button><button type="button" onClick={() => moveImage(index, 1)} disabled={index === hero.images.length - 1} className="px-2 py-1 text-sm font-bold text-slate-600 disabled:opacity-25" aria-label="Move image later">↓</button></div>)}
+        {hero.images.map((src, index) => <div key={src} className="flex min-w-0 items-center gap-2 border border-slate-200 bg-white p-2 min-[360px]:gap-3"><div className="h-12 w-14 shrink-0 bg-cover bg-center min-[360px]:w-20" style={{ backgroundImage: `url(${withBasePath(src)})` }} /><span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-700">{suggestedImages.find((image) => image.src === src)?.label ?? src}</span><button type="button" onClick={() => moveImage(index, -1)} disabled={index === 0} className="shrink-0 px-2 py-1 text-sm font-bold text-slate-600 disabled:opacity-25" aria-label="Move image earlier">↑</button><button type="button" onClick={() => moveImage(index, 1)} disabled={index === hero.images.length - 1} className="shrink-0 px-2 py-1 text-sm font-bold text-slate-600 disabled:opacity-25" aria-label="Move image later">↓</button></div>)}
       </div></div>
       <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4"><button type="button" onClick={saveContent} disabled={status === "saving"} className="rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-500 disabled:opacity-60">{status === "saving" ? "Saving…" : "Publish changes"}</button>{status === "saved" && <span className="text-sm font-semibold text-emerald-700">Published to the homepage</span>}{status === "error" && <span className="text-sm font-semibold text-rose-700">Could not save. Please try again.</span>}</div>
     </div>

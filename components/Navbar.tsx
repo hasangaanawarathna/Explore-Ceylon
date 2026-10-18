@@ -26,9 +26,9 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Explore Ceylon home">
+    <header className="sticky top-0 z-50 w-full min-w-0 max-w-full border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
+      <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-between gap-2 px-3 py-3 min-[360px]:gap-3 min-[360px]:px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex min-w-0 flex-1 items-center gap-2 min-[360px]:gap-3" aria-label="Explore Ceylon home">
           <ResilientImage
             src="/images/explore-ceylon-logo-nav.png"
             alt=""
@@ -54,7 +54,7 @@ export function Navbar() {
           <Button href="/booking">Book Now</Button>
         </div>
 
-        <div ref={menuRef} className="relative lg:hidden">
+        <div ref={menuRef} className="relative shrink-0 lg:hidden">
           <button type="button" aria-label={open ? "Close navigation menu" : "Open navigation menu"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen((current) => !current)} className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm shadow-slate-200/50">
             <span className="grid gap-1" aria-hidden="true">
               <span className={`block h-0.5 w-5 rounded-full bg-current transition ${open ? "translate-y-1.5 rotate-45" : ""}`} />
@@ -63,7 +63,7 @@ export function Navbar() {
             </span>
           </button>
           {open && (
-            <nav id="mobile-navigation" aria-label="Mobile navigation" className="fixed left-4 right-4 top-16 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl shadow-slate-300/40 sm:absolute sm:left-auto sm:right-0 sm:top-14 sm:w-80 sm:rounded-3xl sm:p-4">
+            <nav id="mobile-navigation" aria-label="Mobile navigation" className="fixed left-3 right-3 top-16 max-h-[calc(100dvh-5rem)] max-w-[calc(100vw-1.5rem)] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl shadow-slate-300/40 min-[360px]:left-4 min-[360px]:right-4 min-[360px]:max-w-[calc(100vw-2rem)] sm:absolute sm:left-auto sm:right-0 sm:top-14 sm:w-80 sm:max-w-[calc(100vw-3rem)] sm:rounded-3xl sm:p-4">
               <div className="space-y-1">
                 {navigationItems.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} aria-current={pathname === item.href ? "page" : undefined} className="block min-h-11 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:rounded-2xl">{item.label}</Link>)}
               </div>

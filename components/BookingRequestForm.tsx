@@ -32,9 +32,9 @@ export function BookingRequestForm({ destinations }: { destinations: Destination
     }
   }
 
-  const field = "h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:text-sm";
+  const field = "h-12 w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-base outline-none focus:border-sky-400 focus:bg-white sm:text-sm";
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:p-8">
+    <section className="min-w-0 max-w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/50 min-[360px]:p-5 sm:rounded-[2rem] sm:p-8">
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">Booking request</p>
       <h2 className="mt-3 text-2xl font-semibold text-slate-950">Send your trip details</h2>
       <form onSubmit={submit} className="mt-7 grid gap-5 md:grid-cols-2">
