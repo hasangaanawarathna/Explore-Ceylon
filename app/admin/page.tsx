@@ -250,13 +250,13 @@ export default function AdminPage() {
               >
                 View Website
               </Link>
-              <p className="text-xs uppercase tracking-[0.18em] text-teal-100/50">
+              <p className="hidden text-xs uppercase tracking-[0.18em] text-teal-100/50 lg:block">
                 Today
               </p>
-              <p className="mt-2 text-sm font-semibold text-white">
+              <p className="mt-2 hidden text-sm font-semibold text-white lg:block">
                 12 live requests
               </p>
-              <p className="mt-1 text-sm text-teal-100/60">
+              <p className="mt-1 hidden text-sm text-teal-100/60 lg:block">
                 4 require approval before noon.
               </p>
             </div>
@@ -470,8 +470,8 @@ export default function AdminPage() {
               </Link>
             </div>
 
-            <div className="mt-5 overflow-x-auto">
-              <table className="w-full min-w-[820px] border-collapse text-left text-sm">
+            <div className="mt-5 sm:overflow-x-auto">
+              <table className="responsive-table w-full min-w-[820px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-y border-slate-200 bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
                     <th className="px-3 py-3 font-semibold">ID</th>
@@ -488,23 +488,23 @@ export default function AdminPage() {
                 <tbody>
                   {bookings.map((booking) => (
                     <tr key={booking.id} className="border-b border-slate-200">
-                      <td className="px-3 py-4 font-mono text-xs text-slate-500">
+                      <td data-label="ID" className="px-3 py-4 font-mono text-xs text-slate-500">
                         {booking.id}
                       </td>
-                      <td className="px-3 py-4 font-semibold text-slate-950">
+                      <td data-label="Guest" className="px-3 py-4 font-semibold text-slate-950">
                         {booking.guest}
                       </td>
-                      <td className="px-3 py-4 text-slate-600">{booking.trip}</td>
-                      <td className="px-3 py-4 text-slate-600">{booking.date}</td>
-                      <td className="px-3 py-4 font-semibold text-slate-950">
+                      <td data-label="Trip" className="px-3 py-4 text-slate-600">{booking.trip}</td>
+                      <td data-label="Date" className="px-3 py-4 text-slate-600">{booking.date}</td>
+                      <td data-label="Value" className="px-3 py-4 font-semibold text-slate-950">
                         {formatDualCurrency(booking.valueUsd, usdToLkrRate)}
                       </td>
-                      <td className="px-3 py-4 text-slate-600">{booking.payment}</td>
-                      <td className="px-3 py-4 text-slate-600">{booking.agent}</td>
-                      <td className="px-3 py-4">
+                      <td data-label="Payment" className="px-3 py-4 text-slate-600">{booking.payment}</td>
+                      <td data-label="Agent" className="px-3 py-4 text-slate-600">{booking.agent}</td>
+                      <td data-label="Status" className="px-3 py-4">
                         <StatusBadge status={booking.status} />
                       </td>
-                      <td className="px-3 py-4">
+                      <td data-label="Action" className="px-3 py-4">
                         <button
                           type="button"
                           className="border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-sky-300 hover:text-sky-700"
@@ -556,8 +556,8 @@ export default function AdminPage() {
               <h3 className="mt-2 text-xl font-semibold text-slate-950">
                 Inventory and publishing
               </h3>
-              <div className="mt-5 overflow-x-auto">
-                <table className="w-full min-w-[620px] border-collapse text-left text-sm">
+              <div className="mt-5 sm:overflow-x-auto">
+                <table className="responsive-table w-full min-w-[620px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-y border-slate-200 bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
                       <th className="px-3 py-3 font-semibold">Package</th>
@@ -570,17 +570,17 @@ export default function AdminPage() {
                   <tbody>
                     {packagePipeline.map((item) => (
                       <tr key={item.name} className="border-b border-slate-200">
-                        <td className="px-3 py-4 font-semibold text-slate-950">
+                        <td data-label="Package" className="px-3 py-4 font-semibold text-slate-950">
                           {item.name}
                         </td>
-                        <td className="px-3 py-4 text-slate-600">{item.inventory}</td>
-                        <td className="px-3 py-4 text-slate-600">
+                        <td data-label="Seats" className="px-3 py-4 text-slate-600">{item.inventory}</td>
+                        <td data-label="Price" className="px-3 py-4 text-slate-600">
                           {formatDualCurrency(item.priceUsd, usdToLkrRate)}
                         </td>
-                        <td className="px-3 py-4">
+                        <td data-label="Visibility" className="px-3 py-4">
                           <StatusBadge status={item.visibility} />
                         </td>
-                        <td className="px-3 py-4 text-slate-500">{item.lastEdited}</td>
+                        <td data-label="Edited" className="px-3 py-4 text-slate-500">{item.lastEdited}</td>
                       </tr>
                     ))}
                   </tbody>
