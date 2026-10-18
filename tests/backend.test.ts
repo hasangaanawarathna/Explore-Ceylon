@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { destinationFromRow, packageFromRow } from "../lib/supabase/repository";
 import { MAX_IMAGE_BYTES, storagePathFromPublicUrl, validateImageFile } from "../lib/supabase/storage";
+import { ADMIN_SESSION_MAX_AGE_MS, isAdminSessionWithinLimit } from "../lib/supabase/admin-session";
 
 test("Supabase destination rows map to application models", () => {
   const item = destinationFromRow({ slug: "ella", name: "Ella", location: "Uva", region: "Hills", summary: "Tea country", image: "/ella.jpg", price_usd: 145, duration: "3 days", best_time: "December", activities: ["Hiking"], google_maps_url: "https://maps.example" });
@@ -26,4 +27,11 @@ test("catalog image validation accepts supported files within 5 MB", () => {
 test("managed public image URLs resolve to safe Storage object paths", () => {
   assert.equal(storagePathFromPublicUrl("https://example.supabase.co/storage/v1/object/public/destination-images/packages/coast/photo.webp"), "packages/coast/photo.webp");
   assert.equal(storagePathFromPublicUrl("/images/local.jpg"), null);
+});
+
+test("admin sessions are capped at 30 days", () => {
+  const now = Date.UTC(2026, 9, 18);
+  assert.equal(isAdminSessionWithinLimit(String(now - ADMIN_SESSION_MAX_AGE_MS), now), true);
+  assert.equal(isAdminSessionWithinLimit(String(now - ADMIN_SESSION_MAX_AGE_MS - 1), now), false);
+  assert.equal(isAdminSessionWithinLimit("invalid", now), false);
 });

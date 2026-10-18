@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Booking, BookingStatus, Enquiry, EnquiryStatus } from "@/lib/server/models";
 import { createClient } from "@/lib/supabase/client";
 import { bookingFromRow, enquiryFromRow } from "@/lib/supabase/repository";
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
+import { clearAdminSessionStarted } from "@/lib/supabase/admin-session";
 
 type Dashboard = { counts: Record<string, number>; recentBookings: Booking[]; recentEnquiries: Enquiry[] };
 
@@ -45,10 +44,8 @@ export function LiveOperations() {
   }
 
   async function logout() {
-    await Promise.all([
-      fetch(`${basePath}/api/admin/logout`, { method: "POST" }),
-      createClient().auth.signOut(),
-    ]);
+    await createClient().auth.signOut();
+    clearAdminSessionStarted();
     router.replace("/admin/login");
     router.refresh();
   }

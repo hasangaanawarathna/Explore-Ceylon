@@ -3,8 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
+import { clearAdminSessionStarted, markAdminSessionStarted } from "@/lib/supabase/admin-session";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -16,25 +15,31 @@ export function AdminLoginForm() {
     setLoading(true);
     setError("");
     const form = new FormData(event.currentTarget);
+    const email = String(form.get("email") ?? "").trim();
+    const password = String(form.get("password") ?? "");
 
     try {
-      const response = await fetch(`${basePath}/api/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: String(form.get("password")) }),
-      });
-      const result = (await response.json()) as { error?: string; accessToken?: string; refreshToken?: string };
-      if (!response.ok) return setError(result.error ?? "Unable to sign in.");
-      if (result.accessToken && result.refreshToken) {
-        const { error: sessionError } = await createClient().auth.setSession({
-          access_token: result.accessToken,
-          refresh_token: result.refreshToken,
-        });
-        if (sessionError) {
-          await fetch(`${basePath}/api/admin/logout`, { method: "POST" });
-          return setError("Unable to start the dashboard session.");
-        }
+      const supabase = createClient();
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError || !data.user) {
+        setError("Invalid email address or password.");
+        return;
       }
+
+      const { data: profile, error: profileError } = await supabase
+        .from("admin_profiles")
+        .select("role")
+        .eq("user_id", data.user.id)
+        .eq("is_active", true)
+        .maybeSingle();
+      if (profileError || !profile) {
+        await supabase.auth.signOut();
+        clearAdminSessionStarted();
+        setError("This account does not have active administrator access.");
+        return;
+      }
+
+      markAdminSessionStarted();
       router.replace("/admin");
       router.refresh();
     } catch {
@@ -46,6 +51,9 @@ export function AdminLoginForm() {
 
   return (
     <form onSubmit={submit} className="mt-8 grid gap-5">
+      <label className="grid gap-2 text-sm font-semibold text-slate-700">Email address
+        <input name="email" type="email" required autoComplete="email" inputMode="email" className="h-12 rounded-xl border border-slate-300 px-4 font-normal outline-none focus:border-sky-500" />
+      </label>
       <label className="grid gap-2 text-sm font-semibold text-slate-700">Password
         <input name="password" type="password" required autoComplete="current-password" className="h-12 rounded-xl border border-slate-300 px-4 font-normal outline-none focus:border-sky-500" />
       </label>

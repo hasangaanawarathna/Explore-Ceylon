@@ -92,11 +92,11 @@ Create the production server build:
 npm run build
 ```
 
-Run it with `npm start`. Admin authentication requires a server-capable Next.js host; GitHub Pages cannot execute the API routes.
+Run it with `npm start`.
 
-## Admin development/testing authentication
+## Admin authentication
 
-The shared-password login is development/testing only. Copy the admin variables from `.env.example` into `.env.local`. To keep the existing RLS-protected editing features available, set `ADMIN_SUPABASE_EMAIL` to an existing Supabase Auth user with an active `admin_profiles` row. If its Supabase password differs from `ADMIN_PASSWORD`, provide it separately as the server-only `ADMIN_SUPABASE_PASSWORD`; it is never sent by the login form or exposed to browser code.
+Sign in with the email address and password of the existing Supabase Auth administrator. The account must have an active `admin_profiles` row. Supabase persists and refreshes the browser session; no administrator credentials belong in environment variables.
 
 The admin dashboard is available at `/admin`; unauthenticated visitors are redirected to `/admin/login`.
 
