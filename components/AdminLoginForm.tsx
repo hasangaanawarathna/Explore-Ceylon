@@ -3,7 +3,8 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { assertAdmin } from "@/lib/supabase/repository";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -15,13 +16,35 @@ export function AdminLoginForm() {
     setLoading(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email: String(form.get("email")), password: String(form.get("password")) });
-    const admin = signInError ? null : await assertAdmin();
-    setLoading(false);
-    if (!admin) { await supabase.auth.signOut(); return setError(signInError ? "Invalid email or password." : "This account is not authorized for administration."); }
-    router.replace("/admin");
-    router.refresh();
+
+    try {
+      const response = await fetch(`${basePath}/api/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: String(form.get("email")),
+          password: String(form.get("password")),
+        }),
+      });
+      const result = (await response.json()) as { error?: string; accessToken?: string; refreshToken?: string };
+      if (!response.ok) return setError(result.error ?? "Unable to sign in.");
+      if (result.accessToken && result.refreshToken) {
+        const { error: sessionError } = await createClient().auth.setSession({
+          access_token: result.accessToken,
+          refresh_token: result.refreshToken,
+        });
+        if (sessionError) {
+          await fetch(`${basePath}/api/admin/logout`, { method: "POST" });
+          return setError("Unable to start the dashboard session.");
+        }
+      }
+      router.replace("/admin");
+      router.refresh();
+    } catch {
+      setError("Unable to sign in. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

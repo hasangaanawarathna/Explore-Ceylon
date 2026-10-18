@@ -8,7 +8,6 @@ const supabaseImagePattern = supabaseUrl
   : undefined;
 
 const nextConfig: NextConfig = {
-  output: "export",
   trailingSlash: true,
   ...(basePath
     ? {

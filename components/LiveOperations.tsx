@@ -6,6 +6,8 @@ import type { Booking, BookingStatus, Enquiry, EnquiryStatus } from "@/lib/serve
 import { createClient } from "@/lib/supabase/client";
 import { bookingFromRow, enquiryFromRow } from "@/lib/supabase/repository";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
+
 type Dashboard = { counts: Record<string, number>; recentBookings: Booking[]; recentEnquiries: Enquiry[] };
 
 export function LiveOperations() {
@@ -43,7 +45,10 @@ export function LiveOperations() {
   }
 
   async function logout() {
-    await createClient().auth.signOut();
+    await Promise.all([
+      fetch(`${basePath}/api/admin/logout`, { method: "POST" }),
+      createClient().auth.signOut(),
+    ]);
     router.replace("/admin/login");
     router.refresh();
   }

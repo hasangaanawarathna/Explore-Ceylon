@@ -86,21 +86,19 @@ The seed migration uses `ON CONFLICT DO NOTHING`: it never updates or deletes an
 npm run dev
 ```
 
-Create the GitHub Pages static export:
+Create the production server build:
 
 ```bash
 npm run build
 ```
 
-The output is written to `out/`. The workflow deploys that directory to GitHub Pages.
+Run it with `npm start`. Admin authentication and login notifications now require a server-capable Next.js host; GitHub Pages cannot execute the API routes.
 
-## Static-host architecture
+## Admin development/testing authentication
 
-- Public catalog/settings reads and booking/enquiry inserts use the Supabase browser client.
-- Admin sign-in uses Supabase Auth. The dashboard also verifies an active `admin_profiles` row.
-- Admin catalog, settings, booking, and enquiry changes are enforced by RLS.
-- GitHub Pages cannot securely provide server-side rate limiting, CAPTCHA secret verification, email sending, webhooks, or secret-key operations. Those require a separate trusted runtime or a Supabase Edge Function.
-- New dynamic destination/package detail paths require a rebuild because GitHub Pages serves only files generated during export. List pages update directly from Supabase without a rebuild.
+The shared-password login is development/testing only. Copy the admin variables from `.env.example` into `.env.local`. To keep the existing RLS-protected editing features available, set `ADMIN_SUPABASE_EMAIL` to an existing Supabase Auth user with an active `admin_profiles` row and set that account's password to the same value as `ADMIN_PASSWORD`. If that optional bridge is unavailable, login still succeeds but Supabase-protected edits are not available.
+
+Create a Resend API key, verify the sender domain, and configure `RESEND_API_KEY` and `ADMIN_LOGIN_FROM_EMAIL`. These values are server-only and must never use the `NEXT_PUBLIC_` prefix. Successful logins notify `ADMIN_LOGIN_NOTIFY_EMAIL`, which defaults to `hasanngaanawarathna@gmail.com`. Email delivery failures are logged server-side and do not cancel login.
 
 The admin dashboard is available at `/admin`; unauthenticated visitors are redirected to `/admin/login`.
 
