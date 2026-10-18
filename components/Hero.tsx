@@ -56,9 +56,9 @@ export function Hero({
     <section className="relative isolate overflow-hidden bg-[#fff8ed]">
       <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-[linear-gradient(180deg,rgba(255,248,237,0),rgba(14,116,144,0.12))]" />
 
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-10 sm:px-6 sm:py-14 lg:min-h-[calc(100vh-76px)] lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-16">
-        <div className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-teal-700 sm:text-sm">
+      <div className="mx-auto grid w-full min-w-0 max-w-7xl items-center gap-10 px-4 py-10 sm:px-6 sm:py-14 lg:min-h-[calc(100vh-76px)] lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-16">
+        <div className="min-w-0 max-w-3xl">
+          <p className="max-w-full text-xs font-bold uppercase tracking-[0.16em] text-teal-700 sm:text-sm sm:tracking-[0.24em]">
             {eyebrow}
           </p>
           <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-balance text-slate-950 sm:mt-5 sm:text-6xl lg:text-7xl">
@@ -77,20 +77,75 @@ export function Hero({
             </Button>
           </div>
 
-          <div className="mt-8 grid max-w-2xl gap-3 sm:mt-10 sm:grid-cols-3">
+          <div className="mt-8 grid min-w-0 max-w-2xl grid-cols-[repeat(3,minmax(0,1fr))] gap-2 sm:mt-10 sm:gap-3">
             {heroStats.map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-xl border border-teal-900/10 bg-white/75 p-4 shadow-sm shadow-teal-900/5 sm:rounded-2xl"
+                className="min-w-0 rounded-xl border border-teal-900/10 bg-white/75 px-1.5 py-3 text-center shadow-sm shadow-teal-900/5 sm:rounded-2xl sm:p-4 sm:text-left"
               >
-                <p className="text-2xl font-semibold text-slate-950">{stat.value}</p>
-                <p className="mt-1 text-sm leading-6 text-slate-600">{stat.label}</p>
+                <p className="text-xl font-semibold text-slate-950 sm:text-2xl">{stat.value}</p>
+                <p className="mt-1 break-words text-[11px] leading-4 text-slate-600 sm:text-sm sm:leading-6">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="relative min-h-[430px] sm:min-h-[500px] lg:min-h-[560px]">
+        <div className="sm:hidden">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-teal-950 shadow-xl shadow-teal-950/20">
+            {currentImage && <ResilientImage
+              key={`mobile-${currentImage}`}
+              src={currentImage}
+              alt="A scenic Sri Lankan travel experience"
+              fill
+              preload
+              sizes="100vw"
+              className="object-cover"
+            />}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-transparent" />
+            <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 shadow-lg backdrop-blur-sm">
+              Island grand tour
+            </div>
+            {images.length > 1 && (
+              <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full bg-slate-950/50 px-3 py-2 backdrop-blur-sm" aria-label="Choose hero image">
+                {images.map((image, index) => (
+                  <button
+                    key={image}
+                    type="button"
+                    aria-label={`Show image ${index + 1}`}
+                    aria-current={index === activeImage}
+                    onClick={() => setActiveImage(index)}
+                    className={`!min-h-0 h-2 rounded-full transition-all ${index === activeImage ? "w-6 bg-white" : "w-2 bg-white/55"}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="relative z-10 -mt-8 mx-3 rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/15">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600">Recommended route</p>
+            <div className="mt-2 flex items-end justify-between gap-3">
+              <h2 className="text-xl font-semibold leading-tight text-slate-950">Culture, hills and coast</h2>
+              <div className="shrink-0 rounded-2xl bg-teal-50 px-3 py-2 text-right">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-teal-700">From</p>
+                <p className="text-lg font-semibold text-teal-950">$690</p>
+              </div>
+            </div>
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {routeStops.map((stop) => (
+                <span key={stop} className="shrink-0 rounded-full bg-slate-100 px-3 py-2 text-xs font-medium text-slate-700">{stop}</span>
+              ))}
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {tripNotes.map((note) => (
+                <div key={note} className="flex min-h-14 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-2 py-2 text-center text-[11px] font-semibold leading-4 text-slate-700">
+                  {note}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="relative hidden min-h-[500px] sm:block lg:min-h-[560px]">
           <div className="absolute left-0 right-0 top-0 h-[68%] overflow-hidden rounded-2xl bg-teal-950 shadow-2xl shadow-teal-950/20 sm:left-8 sm:h-[74%] sm:rounded-[2rem]">
             {currentImage && <ResilientImage
               key={currentImage}
