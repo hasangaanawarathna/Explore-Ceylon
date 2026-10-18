@@ -67,6 +67,21 @@ html {
   color: #082f49;
 }
 
+.admin-dashboard main,
+.admin-dashboard section,
+.admin-dashboard form,
+.admin-dashboard fieldset,
+.admin-dashboard input,
+.admin-dashboard select,
+.admin-dashboard textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.admin-dashboard textarea {
+  overflow-x: auto;
+}
+
 @media (max-width: 639px) {
   body { overflow-wrap: anywhere; }
 

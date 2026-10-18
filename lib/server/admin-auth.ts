@@ -2,7 +2,7 @@ import "server-only";
 import { timingSafeEqual } from "node:crypto";
 
 export const ADMIN_SESSION_COOKIE = "explore_ceylon_admin";
-const SESSION_DURATION_SECONDS = 60 * 60 * 8;
+const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 30;
 
 type SessionPayload = { expiresAt: number };
 
@@ -29,10 +29,11 @@ async function sign(value: string) {
 }
 
 export async function createAdminSession() {
+  const expires = new Date(Date.now() + SESSION_DURATION_SECONDS * 1000);
   const payload = toBase64Url(JSON.stringify({
-    expiresAt: Date.now() + SESSION_DURATION_SECONDS * 1000,
+    expiresAt: expires.getTime(),
   } satisfies SessionPayload));
-  return { value: `${payload}.${await sign(payload)}`, maxAge: SESSION_DURATION_SECONDS };
+  return { value: `${payload}.${await sign(payload)}`, maxAge: SESSION_DURATION_SECONDS, expires };
 }
 
 export async function verifyAdminSession(token?: string): Promise<SessionPayload | null> {

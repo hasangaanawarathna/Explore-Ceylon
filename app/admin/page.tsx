@@ -5,6 +5,7 @@ import { formatDualCurrency } from "@/lib/utils";
 import { AdminContentEditor } from "@/components/AdminContentEditor";
 import { AdminCatalogManager } from "@/components/AdminCatalogManager";
 import { AdminGuard } from "@/components/AdminGuard";
+import { AdminNavigation } from "@/components/AdminNavigation";
 import { LiveOperations } from "@/components/LiveOperations";
 import { destinations, packages } from "@/lib/constants";
 import { defaultHomeHero } from "@/lib/defaults";
@@ -155,17 +156,6 @@ const attentionItems = [
   { label: "Content review", detail: "4 gallery images waiting", tone: "sky" },
 ];
 
-const navItems = [
-  "Overview",
-  "Bookings",
-  "Packages",
-  "Leads",
-  "Content",
-  "Payments",
-  "Reports",
-  "Settings",
-];
-
 const toneStyles: Record<string, string> = {
   sky: "border-sky-200 bg-sky-50 text-sky-700",
   emerald: "border-emerald-200 bg-emerald-50 text-emerald-700",
@@ -214,58 +204,13 @@ export default function AdminPage() {
   const database = { destinations, packages, settings: { homeHero: defaultHomeHero } };
 
   return (
-    <AdminGuard><div className="min-h-screen bg-[#edf3f5]">
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
-        <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] lg:w-64">
-          <div className="rounded-2xl bg-[#102a2e] p-4 text-white shadow-xl shadow-slate-300/40 lg:min-h-full lg:rounded-none">
-            <div className="border-b border-white/10 pb-5">
-              <SectionKicker className="text-teal-200/70">Explore Ceylon</SectionKicker>
-              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">Admin</h1>
-              <div className="mt-3 flex items-center gap-2 text-sm text-teal-100/70">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                Tuesday, Aug 4 · Workspace live
-              </div>
-            </div>
-
-            <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
-              {navItems.map((item, index) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className={`block shrink-0 rounded-full px-3 py-2 text-sm font-medium transition lg:rounded-lg ${
-                    index === 0
-                      ? "bg-[#d9f3ed] text-[#102a2e]"
-                      : "text-teal-50/65 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  {item}
-                </a>
-              ))}
-            </nav>
-
-            <div className="mt-6 border-t border-white/10 pt-4">
-              <Link
-                href="/"
-                className="mb-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#102a2e] transition hover:bg-teal-50"
-              >
-                View Website
-              </Link>
-              <p className="hidden text-xs uppercase tracking-[0.18em] text-teal-100/50 lg:block">
-                Today
-              </p>
-              <p className="mt-2 hidden text-sm font-semibold text-white lg:block">
-                12 live requests
-              </p>
-              <p className="mt-1 hidden text-sm text-teal-100/60 lg:block">
-                4 require approval before noon.
-              </p>
-            </div>
-          </div>
-        </aside>
+    <AdminGuard><div className="admin-dashboard min-h-screen overflow-x-clip bg-[#edf3f5]">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-4 px-3 py-4 sm:gap-6 sm:px-6 sm:py-6 lg:flex-row lg:px-8">
+        <AdminNavigation />
 
         <main className="min-w-0 flex-1 space-y-6">
           <LiveOperations />
-          <section id="catalog" className="border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <section id="catalog" className="border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
             <SectionKicker>Supabase catalog</SectionKicker>
             <h2 className="mt-2 text-2xl font-semibold text-slate-950">Destinations and packages</h2>
             <p className="mt-2 text-sm text-slate-600">Create, review, update, or delete the records shown on the public website.</p>
@@ -409,7 +354,7 @@ export default function AdminPage() {
                     <option>Drafts</option>
                   </select>
                   <input
-                    className="h-11 min-w-0 rounded-full border border-slate-300 bg-white px-3 text-base text-slate-700 outline-none focus:border-sky-400 sm:w-64 sm:text-sm"
+                    className="h-11 w-full min-w-0 rounded-full border border-slate-300 bg-white px-3 text-base text-slate-700 outline-none focus:border-sky-400 sm:w-64 sm:text-sm"
                     placeholder="Search guest, route, package"
                   />
                 </div>
@@ -470,7 +415,7 @@ export default function AdminPage() {
               </Link>
             </div>
 
-            <div className="mt-5 sm:overflow-x-auto">
+            <div className="mt-5 max-w-full overflow-x-auto">
               <table className="responsive-table w-full min-w-[820px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-y border-slate-200 bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
@@ -556,7 +501,7 @@ export default function AdminPage() {
               <h3 className="mt-2 text-xl font-semibold text-slate-950">
                 Inventory and publishing
               </h3>
-              <div className="mt-5 sm:overflow-x-auto">
+              <div className="mt-5 max-w-full overflow-x-auto">
                 <table className="responsive-table w-full min-w-[620px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-y border-slate-200 bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
