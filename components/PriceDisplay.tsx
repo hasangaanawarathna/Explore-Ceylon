@@ -27,7 +27,7 @@ export function PriceDisplay({
       <div
         className={cn(
           "flex items-baseline gap-2",
-          isLarge ? "flex-col items-start gap-1 sm:flex-row sm:items-baseline" : "flex-wrap",
+          isLarge ? "flex-col items-start gap-1" : "flex-wrap",
         )}
       >
         <span
@@ -40,8 +40,10 @@ export function PriceDisplay({
         </span>
         <span
           className={cn(
-            "font-semibold leading-none",
-            isLarge ? "text-3xl sm:text-4xl" : "text-lg",
+            "max-w-full font-semibold leading-none tabular-nums",
+            isLarge
+              ? "whitespace-nowrap text-[clamp(1.75rem,3vw,2.25rem)] tracking-tight"
+              : "text-lg",
             isDark ? "text-white" : "text-slate-950",
           )}
         >
